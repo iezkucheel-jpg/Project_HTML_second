@@ -231,6 +231,33 @@ button,input{font:inherit}
 }
 @keyframes quizPulse{50%{transform:translateY(-3px) scale(1.035)}}
 @keyframes ring{0%{opacity:.8;transform:scale(.95)}100%{opacity:0;transform:scale(1.22)}}
+
+/* Interaksi beranda */
+.app-item,.dock .app-icon,.widget{cursor:pointer;touch-action:manipulation}
+.app-icon,.widget{transition:transform .18s cubic-bezier(.2,.8,.2,1),filter .18s,box-shadow .18s}
+.pressable-pressed{transform:scale(.90) !important;filter:brightness(1.16);box-shadow:0 2px 8px rgba(0,0,0,.28) !important}
+.app-item:active .app-icon,.dock .app-icon:active,.widget:active{transform:scale(.92);filter:brightness(1.12)}
+.app-item.quiz .app-icon,.app-item.notes-important .app-icon{animation:quizPulse 2.4s ease-in-out infinite}
+.app-item.quiz .app-icon:after,.app-item.notes-important .app-icon:after{content:"";position:absolute;inset:-5px;border-radius:20px;border:2px solid rgba(255,255,255,.28);animation:ring 2.4s ease-out infinite}
+
+.photo-widget{background-size:cover;background-position:center;transition:background-image .35s ease,transform .25s ease}
+.photo-dots{position:absolute;right:11px;bottom:10px;display:flex;gap:4px}
+.photo-dots i{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.5)}
+.photo-dots i.active{background:#fff;transform:scale(1.25)}
+.swipe-hint{position:absolute;top:10px;right:11px;padding:5px 8px;border-radius:99px;background:rgba(0,0,0,.25);font-size:9px;font-weight:800;backdrop-filter:blur(10px)}
+
+
+.notes-app{position:absolute;inset:0;z-index:82;opacity:0;transform:translateY(100%);pointer-events:none;transition:transform .55s cubic-bezier(.22,1,.36,1),opacity .4s;background:linear-gradient(180deg,rgba(255,253,244,.92),rgba(246,239,213,.9));backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px)}
+.notes-app.open{opacity:1;transform:none;pointer-events:auto}
+.notes-content{height:calc(100% - 82px);overflow:auto;padding:14px}
+.notes-card{background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.9);border-radius:24px;padding:17px;box-shadow:0 12px 30px rgba(80,65,25,.12);margin-bottom:12px}
+.notes-card h2{margin:0 0 7px;color:#5b4317;font-size:20px}
+.notes-card h3{margin:0 0 7px;color:#60491b;font-size:15px}
+.notes-card p,.notes-card li{font-size:12px;line-height:1.65;color:#635d4f}
+.notes-card ul{padding-left:19px;margin:7px 0}
+.notes-example{direction:rtl;text-align:center;font-family:serif;font-size:28px;color:#4c3813;background:#fffaf0;border-radius:15px;padding:9px;margin:9px 0}
+.notes-source{font-size:9px!important;color:#8a806c!important;margin-top:10px}
+
 .app-icon.blue{background:linear-gradient(145deg,#65c7ff,#0876cf)}
 .app-icon.red{background:linear-gradient(145deg,#ff6d6d,#d72838)}
 .app-icon.gray{background:linear-gradient(145deg,#e8e9ed,#9b9da4)}
@@ -396,6 +423,33 @@ select{width:100%;padding:8px 5px;border:2px solid #e7dfc9;border-radius:10px;ba
   width:120px;height:5px;border-radius:99px;background:#fff;
   opacity:.95;pointer-events:none;
 }
+
+/* Foto — carousel 3 gambar */
+.photo-widget{overflow:hidden;position:relative;touch-action:pan-y;user-select:none}
+.photo-track{display:flex;width:300%;height:100%;transition:transform .38s cubic-bezier(.22,.61,.36,1);will-change:transform}
+.photo-slide{flex:0 0 33.333333%;height:100%;background-size:cover;background-position:center}
+.photo-dots{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);display:flex;gap:6px;z-index:5}
+.photo-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.55);box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.photo-dot.active{background:#fff;transform:scale(1.2)}
+.swipe-hint{position:absolute;top:10px;right:11px;z-index:5;padding:5px 8px;border-radius:99px;background:rgba(0,0,0,.28);font-size:9px;font-weight:800;backdrop-filter:blur(10px)}
+
+
+
+/* Catatan v4 — tampilan dan isi dibuat eksplisit agar selalu terlihat */
+.notes-app{display:flex;flex-direction:column;visibility:hidden;z-index:150;overflow:hidden;}
+.notes-app.open{visibility:visible;display:flex;}
+.notes-content{display:block;flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:28px;}
+.notes-hero{background:linear-gradient(145deg,rgba(255,255,255,.92),rgba(255,247,219,.88));}
+.notes-badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#f2df9b;color:#654b16;font-size:9px;font-weight:900;letter-spacing:.5px;margin-bottom:8px}
+.notes-number{float:right;width:31px;height:31px;border-radius:50%;display:grid;place-items:center;background:#ead18a;color:#5d4517;font-weight:900;font-size:11px}
+.notes-rule{background:#fffaf0;border-left:4px solid #d7ae4d;border-radius:12px;padding:9px 10px;margin:8px 0;font-size:11px;line-height:1.55;color:#5d574b}
+.notes-tip{background:#f8efd0;border-radius:12px;padding:9px 10px;margin-bottom:0!important}
+.notes-memory .memory-row{display:flex;justify-content:space-between;gap:8px;align-items:center;background:#fffaf0;border-radius:11px;padding:8px 9px;margin:6px 0;font-size:11px;color:#5d574b}
+.notes-memory .memory-row span{font-family:serif;font-size:18px;direction:rtl}
+
+
+.notes-lock-badge{margin:0 14px 8px;padding:8px 10px;border-radius:12px;background:#fff3c7;color:#6b5017;text-align:center;font-size:10px;font-weight:900}
+.app-icon.locked{animation:none!important}
 </style>
 </head>
 
@@ -444,13 +498,18 @@ select{width:100%;padding:8px 5px;border:2px solid #e7dfc9;border-radius:10px;ba
        ======================================================== -->
   <section class="home" id="homeScreen">
     <div class="home-time" id="homeDate">Rabu, 9 September</div>
-
-    <div class="widget photo-widget">
+    <div class="widget photo-widget" id="photoWidget" role="button" tabindex="0" aria-label="Geser foto">
+      <div class="photo-track" id="photoTrack">
+        <div class="photo-slide" style="background-image:url('https://images.unsplash.com/photo-1522199710521-72d69614c702?auto=format&fit=crop&w=900&q=85')"></div>
+        <div class="photo-slide" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=85')"></div>
+        <div class="photo-slide" style="background-image:url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=85')"></div>
+      </div>
+      <div class="swipe-hint">Geser ‹ ›</div>
+      <div class="photo-dots" id="photoDots"></div>
       <div class="label">Foto</div>
     </div>
-
-    <div class="widget-row">
-      <div class="widget calendar-widget">
+<div class="widget-row">
+      <div class="widget calendar-widget" id="calendarWidget" role="button" tabindex="0" aria-label="Kalender">
         <small>SEPTEMBER</small>
         <b>9</b>
         <span>RABU</span><br>
@@ -465,7 +524,9 @@ select{width:100%;padding:8px 5px;border:2px solid #e7dfc9;border-radius:10px;ba
 
     <div class="app-grid">
       <div class="app-item"><div class="app-icon green emoji">📹</div>FaceTime</div>
-      <div class="app-item"><div class="app-icon emoji red">📅</div>Kalender</div>
+      <div class="app-item notes-important" id="notesIcon" role="button" tabindex="0" aria-label="Buka Catatan">
+        <div class="app-icon emoji yellow">📝</div>Catatan
+      </div>
       <div class="app-item"><div class="app-icon emoji purple">🌈</div>Foto</div>
       <!-- KAMERA DIGANTI MENJADI APLIKASI KUIS — POSISI DAN TATA LETAK LAIN TETAP -->
       <div class="app-item quiz" id="quizIcon" role="button" tabindex="0" aria-label="Buka Kuis Tajwid">
@@ -473,7 +534,7 @@ select{width:100%;padding:8px 5px;border:2px solid #e7dfc9;border-radius:10px;ba
       </div>
 
       <div class="app-item"><div class="app-icon emoji blue">✉️</div>Mail</div>
-      <div class="app-item"><div class="app-icon emoji yellow">📝</div>Catatan</div>
+      <div class="app-item"><div class="app-icon emoji gray">📁</div>Arsip</div>
       <div class="app-item"><div class="app-icon emoji red">🔔</div>Pengingat</div>
 
     </div>
@@ -488,7 +549,62 @@ select{width:100%;padding:8px 5px;border:2px solid #e7dfc9;border-radius:10px;ba
     </div>
   </section>
 
-  <!-- ========================================================
+  <!-- CATATAN TAJWID -->
+  <section class="notes-app" id="notesApp" aria-label="Catatan Tajwid">
+    <div class="app-top">
+      <button class="back" id="closeNotes" type="button">‹ Beranda</button>
+      <div class="app-title">Catatan Tajwid</div>
+      <div class="app-more">•••</div>
+    </div>
+    <div class="notes-lock-badge">🔒 Catatan ini hanya bisa dibuka satu kali</div>
+    <div class="notes-content">
+      <div class="notes-card notes-hero">
+        <div class="notes-badge">📖 MATERI BELAJAR</div>
+        <h2>Catatan Tajwid</h2>
+        <p>Catatan ini hanya dapat dibuka satu kali. Bacalah baik-baik sebelum memulai kuis.</p>
+      </div>
+
+      <div class="notes-card">
+        <div class="notes-number">01</div>
+        <h3>Lam Jalalah — Tafkhim &amp; Tarqiq</h3>
+        <p><b>Lam Jalalah</b> adalah huruf <b>ل</b> pada lafaz Allah: <b>اللّٰه</b>.</p>
+        <div class="notes-rule"><b>🔊 Tafkhim (tebal)</b><br>Lam dibaca tebal jika sebelum lafaz Allah terdapat <b>fathah</b> atau <b>dhammah</b>.</div>
+        <div class="notes-rule"><b>🌿 Tarqiq (tipis)</b><br>Lam dibaca tipis jika sebelum lafaz Allah terdapat <b>kasrah</b>.</div>
+        <div class="notes-example">وَاللّٰهُ &nbsp;&nbsp; عَبْدُ اللّٰهِ &nbsp;&nbsp; بِسْمِ اللّٰهِ</div>
+        <p class="notes-tip"><b>Ingat:</b> fathah/dhammah → <b>TEBAL</b> · kasrah → <b>TIPIS</b>.</p>
+      </div>
+
+      <div class="notes-card">
+        <div class="notes-number">02</div>
+        <h3>Ra — Tafkhim &amp; Tarqiq</h3>
+        <p>Huruf <b>ر</b> bisa dibaca tebal atau tipis. Perhatikan harakat pada Ra.</p>
+        <div class="notes-rule"><b>🔊 Ra Tafkhim (tebal)</b><br>Ra berharakat <b>fathah</b> atau <b>dhammah</b> dibaca tebal. Ra sukun juga dibaca tebal jika sebelumnya fathah atau dhammah.</div>
+        <div class="notes-rule"><b>🌿 Ra Tarqiq (tipis)</b><br>Ra berharakat <b>kasrah</b> dibaca tipis. Ra sukun dapat dibaca tipis jika sebelumnya kasrah pada keadaan yang berlaku.</div>
+        <div class="notes-example">رَبَّنَا = tebal &nbsp;&nbsp; رِجَالٌ = tipis</div>
+        <p class="notes-tip"><b>Ingat:</b> lihat harakat Ra terlebih dahulu. Jika Ra sukun, periksa harakat huruf sebelumnya.</p>
+      </div>
+
+      <div class="notes-card">
+        <div class="notes-number">03</div>
+        <h3>Izhar Syafawi</h3>
+        <p><b>Izhar Syafawi</b> terjadi ketika <b>mim sukun (مْ)</b> bertemu dengan huruf hijaiyah <b>selain ب dan م</b>.</p>
+        <div class="notes-rule"><b>👄 Cara membaca:</b><br>Mim dibaca <b>jelas</b> dari bibir dan <b>tanpa dengung</b>.</div>
+        <div class="notes-example">أَلَمْ تَرَ &nbsp;&nbsp; عَلَيْهِمْ وَلَا</div>
+        <p class="notes-tip"><b>Ingat cepat:</b> مْ + selain ب dan م → <b>Izhar Syafawi</b>.</p>
+      </div>
+
+      <div class="notes-card notes-memory">
+        <h3>🧠 Kunci Hafalan Cepat</h3>
+        <div class="memory-row"><span>اللّٰه</span><b>Fathah/Dhammah → Tebal</b></div>
+        <div class="memory-row"><span>اللّٰه</span><b>Kasrah → Tipis</b></div>
+        <div class="memory-row"><span>رَ / رُ</span><b>Umumnya Tebal</b></div>
+        <div class="memory-row"><span>رِ</span><b>Tipis</b></div>
+        <div class="memory-row"><span>مْ + selain ب/م</span><b>Izhar Syafawi</b></div>
+        <p class="notes-source">Materi diringkas dari sumber pembelajaran tajwid daring yang telah digunakan pada revisi sebelumnya.</p>
+      </div>
+    </div>
+  </section>
+<!-- ========================================================
        APLIKASI KUIS — TERBUKA DI DALAM IPHONE
        ======================================================== -->
   <section class="quiz-app" id="quizApp">
@@ -576,7 +692,7 @@ const questions=[
   pairs:[
    {left:"Ra berharakat KASRAH",correct:"Dibaca Tarqiq (tipis)"},
    {left:"Ra berharakat FATHAH",correct:"Dibaca Tafkhim (tebal)"},
-   {left:"Mim sukun bertemu huruf lain",correct:"Dibaca Idhar Syafawi (jelas)"}],
+   {left:"Mim sukun bertemu huruf selain mim dan ba",correct:"Dibaca Idhar Syafawi (jelas)"}],
   options:["Dibaca Tarqiq (tipis)","Dibaca Tafkhim (tebal)","Dibaca Idhar Syafawi (jelas)"]},
  {type:"tf",tag:"Benar / Salah",icon:"✅",title:"Benar atau Keliru?",
   story:"Pernyataan: <b>\"Idhar Syafawi itu dibaca dengan JELAS, tanpa dengung.\"</b>",correct:true},
@@ -686,6 +802,107 @@ document.getElementById("lockScreen").onkeydown=e=>{
    showPin();
  }
 };
+
+/* ============================================================
+   INTERAKSI BERANDA
+   ============================================================ */
+const photoWidget=document.getElementById("photoWidget");
+const calendarWidget=document.getElementById("calendarWidget");
+const notesIcon=document.getElementById("notesIcon");
+const notesApp=document.getElementById("notesApp");
+const closeNotes=document.getElementById("closeNotes");
+
+function pressFeedback(el){
+  if(!el)return;
+  el.classList.remove("pressable-pressed");
+  void el.offsetWidth;
+  el.classList.add("pressable-pressed");
+  setTimeout(()=>el.classList.remove("pressable-pressed"),180);
+}
+
+document.querySelectorAll(".app-item,.dock .app-icon,.widget").forEach(el=>{
+  el.addEventListener("pointerdown",()=>pressFeedback(el.querySelector(".app-icon")||el));
+});
+
+/* Foto: 3 gambar yang benar-benar bisa digeser */
+const photoTrack=document.getElementById("photoTrack");
+const photoDots=document.getElementById("photoDots");
+let photoIndex=0, photoStartX=0, photoDragging=false;
+
+function renderPhotoDots(){
+  if(!photoDots)return;
+  photoDots.innerHTML="";
+  for(let i=0;i<3;i++){
+    const d=document.createElement("span");
+    d.className="photo-dot"+(i===photoIndex?" active":"");
+    photoDots.appendChild(d);
+  }
+}
+function showPhoto(i){
+  photoIndex=(i+3)%3;
+  if(photoTrack) photoTrack.style.transform=`translateX(-${photoIndex*33.333333}%)`;
+  renderPhotoDots();
+}
+function nextPhoto(){showPhoto(photoIndex+1)}
+function prevPhoto(){showPhoto(photoIndex-1)}
+
+if(photoWidget && photoTrack){
+  photoWidget.addEventListener("pointerdown",e=>{
+    photoStartX=e.clientX;
+    photoDragging=true;
+    photoWidget.setPointerCapture?.(e.pointerId);
+  });
+  photoWidget.addEventListener("pointerup",e=>{
+    if(!photoDragging)return;
+    const dx=e.clientX-photoStartX;
+    photoDragging=false;
+    if(Math.abs(dx)>35){
+      if(dx<0) nextPhoto(); else prevPhoto();
+    }
+  });
+  photoWidget.addEventListener("pointercancel",()=>{photoDragging=false});
+  photoWidget.addEventListener("keydown",e=>{
+    if(e.key==="ArrowRight"){e.preventDefault();nextPhoto()}
+    if(e.key==="ArrowLeft"){e.preventDefault();prevPhoto()}
+  });
+  renderPhotoDots();
+}
+
+/* Kalender: hanya efek tekan biasa, tanpa petasan. */
+calendarWidget?.addEventListener("click",()=>pressFeedback(calendarWidget));
+
+/* Catatan: hanya boleh dibuka satu kali. Kunci disimpan di localStorage. */
+const notesOpenedKey="detektifTajwid_notesOpened_FINAL";
+function notesAlreadyOpened(){return localStorage.getItem(notesOpenedKey)==="1"}
+function updateNotesLockUI(){
+  if(!notesIcon)return;
+  const locked=notesAlreadyOpened();
+  notesIcon.setAttribute("aria-disabled",locked?"true":"false");
+  notesIcon.style.opacity=locked?".55":"";
+  notesIcon.style.filter=locked?"grayscale(.7)":"";
+  notesIcon.querySelector(".app-icon")?.classList.toggle("locked",locked);
+  notesIcon.title=locked?"Catatan sudah dibuka dan dikunci":"Buka Catatan";
+}
+function openNotes(){
+  pressFeedback(notesIcon);
+  if(notesAlreadyOpened()){
+    alert("Catatan sudah pernah dibuka. Catatan dikunci agar tidak digunakan untuk mencontek.");
+    return;
+  }
+  localStorage.setItem(notesOpenedKey,"1");
+  homeScreen.classList.add("hide");
+  notesApp.classList.add("open");
+  updateNotesLockUI();
+}
+notesIcon?.addEventListener("click",openNotes);
+notesIcon?.addEventListener("keydown",e=>{
+  if(e.key==="Enter"||e.key===" "){e.preventDefault();openNotes()}
+});
+closeNotes?.addEventListener("click",()=>{
+  notesApp.classList.remove("open");
+  setTimeout(()=>homeScreen.classList.remove("hide"),300);
+});
+updateNotesLockUI();
 
 /* Buka aplikasi dari icon Kuis */
 function openQuizApp(){
@@ -953,6 +1170,7 @@ document.getElementById("homeAfter").onclick=()=>{
  startPage.style.display="flex";
  document.getElementById("namaInput").value="";
 };
+
 </script>
 </body>
 </html>
