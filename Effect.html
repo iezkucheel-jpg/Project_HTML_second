@@ -1,12 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detektif Tajwid</title>
+    <title>Detektif Tajwid - Adventure Mode</title>
     <style>
-        /* ==================== 1. PENGATURAN DASAR & BACKGROUND ==================== */
+        /* ==================== 1. RESET & BACKGROUND MANAGEMENT ==================== */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -14,210 +13,212 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(to bottom, #1a0826, #4a154b); /* Langit malam detektif */
+            font-family: 'Comic Sans MS', 'Segoe UI', sans-serif;
+            background: linear-gradient(to bottom, #11031c, #2d0b3d, #52135a); 
             overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            perspective: 1000px;
         }
 
-        /* ==================== 2. HIASAN GUNUNG & ROKET BERGERAK (CUSTOMIZABLE) ==================== */
-        /* Lapisan Gunung Belakang (Bergerak Lambat) */
-        .gunung-back {
+        /* ==================== 2. DEKORASI PARALAKS GUNUNG & ROKET ==================== */
+        .gunung-jauh {
             position: absolute;
-            bottom: -20px;
+            bottom: -30px;
             left: -10%;
             width: 120%;
-            height: 300px;
-            background: #230c33;
-            clip-path: polygon(0% 100%, 20% 40%, 45% 65%, 75% 30%, 100% 100%);
+            height: 280px;
+            background: #190624;
+            clip-path: polygon(0% 100%, 25% 35%, 50% 60%, 75% 25%, 100% 100%);
             z-index: 1;
-            animation: gunungGoyang 12s ease-in-out infinite alternate;
+            animation: gunungGoyang 15s ease-in-out infinite alternate;
         }
 
-        /* Lapisan Gunung Depan (Bergerak Lebih Cepat) */
-        .gunung-front {
+        .gunung-dekat {
             position: absolute;
-            bottom: -10px;
+            bottom: -15px;
             left: -5%;
             width: 110%;
-            height: 200px;
-            background: #36134f;
-            clip-path: polygon(0% 100%, 15% 50%, 35% 70%, 60% 45%, 80% 65%, 100% 100%);
+            height: 180px;
+            background: #280a3a;
+            clip-path: polygon(0% 100%, 15% 45%, 40% 65%, 65% 40%, 85% 60%, 100% 100%);
             z-index: 2;
-            animation: gunungGoyang 8s ease-in-out infinite alternate-reverse;
+            animation: gunungGoyang 10s ease-in-out infinite alternate-reverse;
         }
 
-        /* Roket Detektif Tajwid */
         .roket-dekorasi {
             position: absolute;
-            top: 15%;
-            right: 15%;
-            font-size: 4rem;
+            top: 12%;
+            right: 12%;
+            font-size: 4.5rem;
             z-index: 1;
-            filter: drop-shadow(0 0 20px rgba(255, 165, 0, 0.6));
+            filter: drop-shadow(0 0 25px rgba(255, 140, 0, 0.7));
             animation: roketMelayang 4s ease-in-out infinite alternate;
         }
 
-        /* Bintang-bintang berkedip */
-        .bintang {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation: kedip 2s infinite ease-in-out;
-        }
-
-        /* ==================== 3. WADAH UTAMA KUIS (SMOOTH SLIDER) ==================== */
-        .kuis-card-box {
+        /* ==================== 3. GAME CONTAINER (BINGKAI UTAMA) ==================== */
+        .game-wrapper {
             position: relative;
             width: 90%;
-            max-width: 480px;
-            height: 450px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-            border: 4px solid #ffd700; /* Bingkai emas detektif */
+            max-width: 520px;
+            height: 380px;
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 28px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+            border: 5px solid #ffcc00; /* Bingkai Emas Khas Detektif */
             z-index: 10;
             overflow: hidden;
         }
 
-        /* Gaya dasar untuk setiap lembar soal */
-        .slide-soal {
-            position: absolute;
-            width: 100%;
+        /* ==================== 4. SMOOTH SLIDER LOGIC (HORIZONTAL FLUID) ==================== */
+        .slide-container {
+            display: flex;
+            width: 200%; /* Jumlah slide (2) x 100% */
             height: 100%;
-            padding: 35px;
+            /* KUNCI SMOOTH: Pergerakan super mulus kesamping */
+            transition: transform 0.65s cubic-bezier(0.25, 1, 0.5, 1); 
+        }
+
+        .slide-soal {
+            width: 50%; /* Mengisi setengah dari lebar container (1 slide utuh) */
+            height: 100%;
+            padding: 30px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            
-            /* KONDISI AWAL: Disembunyikan di bawah & samar-samar */
-            opacity: 0;
-            transform: translateY(40px) scale(0.95);
-            pointer-events: none;
-            
-            /* KUNCI UTAMA TRANSISI: Dibuat super smooth mengalir ke atas */
-            transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), 
-                        transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* KONDISI AKTIF: Meluncur naik dan muncul dengan mulus */
-        .slide-soal.active {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            pointer-events: auto;
-        }
-
-        /* Elemen teks didalam slide */
-        .judul-soal {
-            font-size: 1.4rem;
-            color: #4a154b;
-            margin-bottom: 5px;
+        /* ==================== 5. ELEMEN LATIHAN & HURUF ==================== */
+        .judul-game {
+            font-size: 1.6rem;
+            color: #3d0c41;
             font-weight: 800;
+            margin-bottom: 4px;
         }
 
-        .sub-judul {
-            font-size: 0.9rem;
-            color: #777;
-            margin-bottom: 25px;
+        .info-soal {
+            font-size: 0.95rem;
+            color: #ff9900;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
         }
 
-        /* Tombol Pilihan Jawaban */
-        .opsi-jawaban {
-            width: 100%;
-            padding: 14px 20px;
-            margin: 8px 0;
-            background: white;
-            border: 2px solid #ddd;
-            border-radius: 12px;
-            font-size: 1rem;
+        .teks-soal {
+            font-size: 1.15rem;
+            color: #222;
             font-weight: 600;
-            color: #333;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            max-width: 90%;
+        }
+
+        /* Grid Opsi Jawaban (Biar Ga Kaku Memanjang) */
+        .grid-jawaban {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Membagi jadi 2 kolom sejajar */
+            gap: 15px;
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .tombol-opsi {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border: 3px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #4a5568;
             cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: left;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efek pop-up membal */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
 
-        .opsi-jawaban:hover {
-            border-color: #ffd700;
+        /* Efek interaktif pas disentuh mouse */
+        .tombol-opsi:hover {
+            border-color: #ffcc00;
             background: #fffdf0;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.2);
+            color: #3d0c41;
+            transform: scale(1.04) translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 204, 0, 0.25);
         }
 
-        /* ==================== 4. TIMELINE ANIMASI (KEYFRAMES) ==================== */
+        /* Tombol navigasi balik */
+        .tombol-kembali {
+            grid-column: span 2; /* Memenuhi baris bawah */
+            background: #edf2f7;
+            border: 2px dashed #cbd5e0;
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tombol-kembali:hover { background: #e2e8f0; }
+
+        /* ==================== 6. KEYFRAMES ANIMASI LATAR ==================== */
         @keyframes gunungGoyang {
-            0% { transform: translateX(-2%) translateY(0); }
-            100% { transform: translateX(2%) translateY(5px); }
+            0% { transform: translateX(-1%) translateY(0); }
+            100% { transform: translateX(1%) translateY(8px); }
         }
 
         @keyframes roketMelayang {
             0% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(3deg); }
-            100% { transform: translateY(5px) rotate(-2deg); }
-        }
-
-        @keyframes kedip {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
+            50% { transform: translateY(-20px) rotate(4deg); }
+            100% { transform: translateY(8px) rotate(-3deg); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Elemen Dekorasi Latar Belakang -->
-    <div class="bintang" style="top:10%; left:20%; width:3px; height:3px; animation-delay: 0.5s;"></div>
-    <div class="bintang" style="top:30%; left:70%; width:4px; height:4px; animation-delay: 1s;"></div>
-    <div class="bintang" style="top:50%; left:10%; width:2px; height:2px; animation-delay: 1.5s;"></div>
+    <!-- Elemen Dekorasi Bergerak -->
     <div class="roket-dekorasi">🚀</div>
-    <div class="gunung-back"></div>
-    <div class="gunung-front"></div>
+    <div class="gunung-jauh"></div>
+    <div class="gunung-dekat"></div>
 
     <!-- Wadah Aplikasi Kuis -->
-    <div class="kuis-card-box">
-        
-        <!-- Soal 1 -->
-        <div class="slide-soal active" id="soal1">
-            <div class="judul-soal">🕵️‍♂️ Detektif Tajwid</div>
-            <div class="sub-judul">Soal 1 dari 10 • Lam Jalalah</div>
-            <p style="margin-bottom: 20px; font-weight: 600;">Bagaimana cara membaca Lam Jalalah jika didahului harakat Fathah?</p>
+    <div class="game-wrapper">
+        <div class="slide-container" id="sliderEngine">
             
-            <button class="opsi-jawaban" onclick="pindahKeSoal(1, 2)">A. Dibaca Tebal (Tafkhim)</button>
-            <button class="opsi-jawaban" onclick="pindahKeSoal(1, 2)">B. Dibaca Tipis (Tarqiq)</button>
-        </div>
+            <!-- SLIDE SOAL 1 -->
+            <div class="slide-soal">
+                <div class="judul-game">🕵️‍♂️ Detektif Tajwid</div>
+                <div class="info-soal">Soal 1 dari 10 • Lam Jalalah</div>
+                <div class="teks-soal">Bagaimana cara membaca Lam Jalalah jika didahului harakat Fathah?</div>
+                
+                <div class="grid-jawaban">
+                    <button class="tombol-opsi" onclick="geserSlide(1)">A. Dibaca Tebal (Tafkhim)</button>
+                    <button class="tombol-opsi" onclick="geserSlide(1)">B. Dibaca Tipis (Tarqiq)</button>
+                </div>
+            </div>
 
-        <!-- Soal 2 -->
-        <div class="slide-soal" id="soal2">
-            <div class="judul-soal">🕵️‍♂️ Detektif Tajwid</div>
-            <div class="sub-judul">Soal 2 dari 10 • Hukum Ra</div>
-            <p style="margin-bottom: 20px; font-weight: 600;">Ketika huruf Ra berharakat Kasrah, maka hukum bacaannya adalah...</p>
-            
-            <button class="opsi-jawaban" onclick="pindahKeSoal(2, 1)">A. Ra Tafkhim</button>
-            <button class="opsi-jawaban" onclick="pindahKeSoal(2, 1)">B. Ra Tarqiq</button>
-        </div>
+            <!-- SLIDE SOAL 2 -->
+            <div class="slide-soal">
+                <div class="judul-game">🕵️‍♂️ Detektif Tajwid</div>
+                <div class="info-soal">Soal 2 dari 10 • Hukum Ra</div>
+                <div class="teks-soal">Ketika huruf Ra berharakat Kasrah, maka hukum bacaannya adalah...</div>
+                
+                <div class="grid-jawaban">
+                    <button class="tombol-opsi" onclick="geserSlide(0)">A. Ra Tafkhim</button>
+                    <button class="tombol-opsi" onclick="geserSlide(0)">B. Ra Tarqiq</button>
+                    <button class="tombol-kembali" onclick="geserSlide(0)">⬅ Kembali ke Soal Sebelumnya</button>
+                </div>
+            </div>
 
+        </div>
     </div>
 
-    <!-- ==================== 5. LOGIKA JAVASCRIPT ==================== */ -->
+    <!-- ==================== 7. JAVASCRIPT ENGINE ==================== -->
     <script>
-        function pindahKeSoal(nomorSekarang, nomorTujuan) {
-            const slideSekarang = document.getElementById(`soal${nomorSekarang}`);
-            const slideTujuan = document.getElementById(`soal${nomorTujuan}`);
-
-            if (slideSekarang && slideTujuan) {
-                // Sembunyikan slide lama (otomatis meluncur halus karena efek CSS transition)
-                slideSekarang.classList.remove('active');
-                
-                // Beri jeda sepersekian detik agar animasi keluar selesai, baru masukkan slide baru
-                setTimeout(() => {
-                    slideTujuan.classList.add('active');
-                }, 150); 
-            }
+        function geserSlide(indeksTujuan) {
+            const engine = document.getElementById('sliderEngine');
+            // Menggeser container utama berdasarkan persentase indeks slide (0% atau -50%)
+            engine.style.transform = `translateX(-${indeksTujuan * 50}%)`;
         }
     </script>
 </body>
