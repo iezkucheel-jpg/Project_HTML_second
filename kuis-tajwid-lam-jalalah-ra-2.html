@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detektif Tajwid - Lam Jalalah & Ra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FFFBF2;
+    --gold: #D9AE55;
+    --gold-dark: #8A6D1F;
+    --gold-soft: #F4E7C6;
+    --green: #2F8F63;
+    --green-dark: #1E4A35;
+    --green-soft: #E4F5EC;
+    --red: #E0574C;
+    --ink: #2B2320;
+    --blue: #2E6E8E;
+    --peach: #FCEADF;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: radial-gradient(circle at 20% 0%, #F3ECD3 0%, #EAF3EC 45%, #DDEFE6 100%);
+    color: var(--ink);
+    padding: 16px;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; }
+  .card {
+    background: var(--cream);
+    border: 3px solid var(--gold);
+    border-radius: 22px;
+    padding: 22px 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 10px 24px rgba(138, 109, 31, 0.16);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0; height: 6px;
+    background: linear-gradient(90deg, var(--gold), var(--green), var(--gold));
+  }
+
+  .mascot-hero { text-align: center; margin-bottom: 6px; }
+  .mascot-hero img { width: 84px; height: 84px; animation: bounce 2.4s ease-in-out infinite; filter: drop-shadow(0 6px 8px rgba(0,0,0,0.12)); }
+  @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+  h1 {
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 22px; color: var(--green-dark); margin: 0 0 4px; text-align: center;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  h1 img { width: 30px; height: 30px; }
+  .sub { text-align: center; font-size: 13px; color: #7a6a45; margin-bottom: 18px; font-weight: 600; }
+  label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--green-dark); }
+  input[type=text], textarea, select {
+    width: 100%; padding: 12px 14px; border-radius: 12px; border: 2px solid var(--gold-soft);
+    font-size: 15px; margin-bottom: 12px; font-family: inherit; background: #fff;
+    transition: border-color .2s ease;
+  }
+  input[type=text]:focus, select:focus { outline: none; border-color: var(--green); }
+  textarea { resize: vertical; min-height: 70px; }
+
+  .btn {
+    width: 100%; padding: 14px; border: none; border-radius: 14px; font-size: 15px;
+    font-weight: 800; font-family: 'Baloo 2', sans-serif; letter-spacing: .2px;
+    cursor: pointer; color: #fff;
+    background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+    margin-top: 4px; box-shadow: 0 6px 14px rgba(47,143,99,0.3);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: transform .12s ease;
+  }
+  .btn img { width: 20px; height: 20px; }
+  .btn:active { transform: scale(0.97); }
+  .btn:disabled { background: #C6CFC9; box-shadow: none; cursor: not-allowed; }
+  .btn.secondary { background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%); box-shadow: 0 6px 14px rgba(138,109,31,0.28); }
+  .btn.outline { background: #fff; border: 2px solid var(--green); color: var(--green-dark); box-shadow: none; }
+
+  .progress-wrap { background: var(--gold-soft); border-radius: 20px; height: 10px; overflow: hidden; margin-bottom: 6px; }
+  .progress-bar { height: 100%; background: linear-gradient(90deg, var(--green), #55B98A); width: 0%; transition: width .3s ease; border-radius: 20px; }
+  .progress-text { text-align: center; font-size: 12px; color: #7a6a45; margin-bottom: 14px; font-weight: 700; }
+
+  .q-title {
+    font-family: 'Baloo 2', sans-serif; font-size: 17px; font-weight: 700; color: var(--green-dark);
+    margin-bottom: 6px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .q-title img { width: 24px; height: 24px; }
+  .q-type-tag {
+    display: inline-block; font-size: 11px; font-weight: 800; color: var(--gold-dark);
+    background: var(--gold-soft); padding: 4px 12px; border-radius: 20px; margin: 0 auto 12px; text-align: center;
+  }
+  .q-type-wrap { text-align: center; }
+  .story-box {
+    background: #fff; border: 2px dashed var(--gold); border-radius: 14px; padding: 14px 16px;
+    font-size: 14.5px; line-height: 1.65; margin-bottom: 14px;
+  }
+  .arabic { font-size: 24px; direction: rtl; text-align: center; margin: 6px 0; color: var(--green-dark); }
+
+  .opt-btn {
+    display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: #fff;
+    border: 2px solid var(--gold-soft);
+    border-radius: 14px; padding: 13px 14px; margin-bottom: 10px; font-size: 14.5px; font-weight: 600; cursor: pointer;
+    color: var(--ink); transition: transform .1s ease, border-color .15s ease;
+  }
+  .opt-btn:active { transform: scale(0.98); }
+  .opt-btn:not(:disabled):hover { border-color: var(--green); }
+  .opt-btn img.opt-icon { width: 20px; height: 20px; flex-shrink: 0; }
+  .opt-btn.correct { background: var(--green-soft); border-color: var(--green); color: var(--green-dark); font-weight: 800; }
+  .opt-btn.wrong { background: #FCE4E1; border-color: var(--red); color: var(--red); }
+  .opt-btn.selected { background: var(--green-soft); border-color: var(--green); font-weight: 800; }
+  .opt-btn:disabled { cursor: default; }
+  .warn-msg { text-align: center; font-size: 13px; font-weight: 800; color: var(--red); min-height: 18px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .warn-msg img { width: 16px; height: 16px; }
+
+  .tile-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; justify-content: center; }
+  .tile { background: #fff; border: 2px solid var(--gold); border-radius: 12px; padding: 10px 14px; font-size: 14px; font-weight: 600; cursor: pointer; transition: transform .1s ease; }
+  .tile:active { transform: scale(0.95); }
+  .tile.used { opacity: 0.3; cursor: default; }
+  .build-box {
+    min-height: 48px; background: #fff; border: 2px dashed var(--green); border-radius: 14px;
+    padding: 10px 12px; font-size: 14px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+    color: #7a6a45; font-weight: 600;
+  }
+
+  table.match-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 10px; }
+  table.match-table td { padding: 9px 4px; border-bottom: 1px solid var(--gold-soft); vertical-align: middle; }
+  table.match-table select { margin-bottom: 0; padding: 8px 8px; font-size: 13px; }
+
+  .feedback { text-align: center; font-size: 13.5px; font-weight: 800; min-height: 22px; margin-top: 4px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .feedback img { width: 18px; height: 18px; }
+  .feedback.ok { color: var(--green-dark); }
+  .feedback.no { color: var(--red); }
+
+  .result-emoji { text-align: center; margin-bottom: 6px; }
+  .result-emoji img { width: 72px; height: 72px; animation: bounce 2s ease-in-out infinite; }
+  .result-score { text-align: center; font-family: 'Baloo 2', sans-serif; font-size: 48px; font-weight: 800; color: var(--green-dark); margin: 4px 0; }
+  .result-label { text-align: center; font-size: 14px; color: #7a6a45; margin-bottom: 10px; font-weight: 700; }
+  .status { text-align: center; font-size: 13px; margin-top: 10px; min-height: 18px; font-weight: 700; }
+  .status.ok { color: var(--green-dark); }
+  .status.err { color: var(--red); }
+
+  .empty-note { text-align: center; font-size: 13px; color: #8a7a55; padding: 8px 4px; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; }
+  .empty-note img { width: 20px; height: 20px; flex-shrink: 0; }
+  .hidden { display: none; }
+  .footer-note { text-align: center; font-size: 12.5px; color: #8a7a55; padding: 6px 12px 18px; line-height: 1.6; display: flex; align-items: center; justify-content: center; gap: 4px; flex-wrap: wrap; }
+  .footer-note img { width: 16px; height: 16px; }
+  .path-step { font-size: 13.5px; color: #7a6a45; text-align:center; margin-bottom: 8px; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- LAYAR NAMA -->
+  <div class="card" id="screenName">
+    <div class="mascot-hero"><img src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/1f575.png" alt="detektif"></div>
+    <h1><span>Detektif Tajwid</span></h1>
+    <div class="sub">Lam Jalalah &middot; Idhar Syafawi &middot; Ra Tarqiq &amp; Tafkhim</div>
+    <label for="namaInput">Nama Siswa</label>
+    <input type="text" id="namaInput" placeholder="Tulis nama lengkap...">
+    <button class="btn" id="startBtn">Mulai Petualangan <img src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/1f680.png" alt="roket"></button>
+  </div>
+
+  <!-- LAYAR KUIS -->
+  <div class="card hidden" id="screenQuiz">
+    <div class="progress-wrap"><div class="progress-bar" id="bar"></div></div>
+    <div class="progress-text" id="progressText">Soal 1 dari 10</div>
+    <div class="q-type-wrap"><span class="q-type-tag" id="qType">Pilihan Ganda</span></div>
+    <div class="q-title" id="qTitle"></div>
+    <div id="qBody"></div>
+    <div class="feedback" id="feedback"></div>
+  </div>
+
+  <!-- LAYAR HASIL -->
+  <div class="card hidden" id="screenResult">
+    <div class="result-emoji" id="resultEmoji"></div>
+    <div class="result-score" id="resultScore">0</div>
+    <div class="result-label">Nilai Harian</div>
+    <div class="sub" id="resultDetail"></div>
+    <div class="status" id="submitStatus"></div>
+  </div>
+
+  <div class="card" id="infoNote">
+    <div class="empty-note"><img src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/1f4ca.png" alt="grafik"> Rekap nilai semua siswa otomatis masuk ke Google Sheets. Ustad/Ustadzah tinggal buka spreadsheet-nya.</div>
+  </div>
+
+  <div class="footer-note">Jawab dengan teliti ya, anak-anak, supaya ustad/ustadzah tahu sejauh mana pemahamanmu. Terima kasih <img src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/263a.png" alt="senyum"></div>
+
+</div>
+
+<script>
+const SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz8TWEnHNhHR7RG4HAb72raYQ8u63bZHEMNSaFwfvs6vgve1-0PSO5NDAoQiMmtWnUSJg/exec";
+
+// ================== HELPER STIKER ==================
+const TW_BASE = "https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/72x72/";
+function stiker(code, size, altText) {
+  size = size || 20;
+  altText = altText || '';
+  return '<img src="' + TW_BASE + code + '.png" alt="' + altText + '" style="width:' + size + 'px;height:' + size + 'px;vertical-align:middle;">';
+}
+
+// ================== BANK SOAL (versi sederhana) ==================
+const questions = [
+  {
+    type: "mc",
+    tag: "Pilihan Ganda",
+    icon: "1f31f",
+    title: "Rahasia Nama Allah",
+    story: "Faiz membaca lafadz <span class='arabic'>اللّٰه</span>. Huruf sebelumnya berharakat <b>FATHAH</b>. Menurutmu, lafadz Allah ini dibaca...",
+    options: ["Tebal (tafkhim)", "Tipis (tarqiq)"],
+    correct: 0
+  },
+  {
+    type: "mc",
+    tag: "Pilihan Ganda",
+    icon: "1f4dd",
+    title: "Isi Kotak Kosong",
+    story: "Lam Jalalah dibaca <b>TIPIS</b> kalau huruf sebelumnya berharakat...",
+    options: ["Kasrah (harakat garis di BAWAH huruf)", "Fathah (harakat garis di ATAS huruf)", "Dhommah (harakat bulat kecil di atas)"],
+    correct: 0
+  },
+  {
+    type: "match",
+    tag: "Cocokkan Pasangan",
+    icon: "1f48c",
+    title: "Jodohkan Hukum dengan Cirinya",
+    story: "Cocokkan setiap hukum bacaan dengan penjelasan yang tepat.",
+    pairs: [
+      { left: "Ra berharakat KASRAH", correct: "Dibaca Tarqiq (tipis)" },
+      { left: "Ra berharakat FATHAH", correct: "Dibaca Tafkhim (tebal)" },
+      { left: "Mim sukun bertemu huruf lain", correct: "Dibaca Idhar Syafawi (jelas)" }
+    ],
+    options: [
+      "Dibaca Tarqiq (tipis)",
+      "Dibaca Tafkhim (tebal)",
+      "Dibaca Idhar Syafawi (jelas)"
+    ]
+  },
+  {
+    type: "tf",
+    tag: "Benar / Salah",
+    icon: "2705",
+    title: "Benar atau Keliru?",
+    story: "Pernyataan: \"Idhar Syafawi itu dibaca dengan JELAS, tanpa dengung.\"",
+    correct: true
+  },
+  {
+    type: "multi",
+    tag: "Pilih Jawaban Benar",
+    icon: "1f9e9",
+    title: "Pilih 2 Pernyataan yang Benar",
+    story: "Perhatikan pernyataan tentang bacaan Ra di bawah ini. Ketuk 2 pernyataan yang BENAR, lalu tekan tombol Periksa Jawaban.",
+    options: [
+      "Ra berharakat FATHAH dibaca tebal (tafkhim)",
+      "Ra berharakat DHOMMAH dibaca tipis (tarqiq)",
+      "Ra berharakat KASRAH dibaca tipis (tarqiq)",
+      "Semua bacaan Ra selalu sama, tidak dipengaruhi harakat"
+    ],
+    correctIndexes: [0, 2]
+  },
+  {
+    type: "mc",
+    tag: "Detektif Kesalahan",
+    icon: "1f50d",
+    title: "Detektif Bacaan",
+    story: "Rina bilang: \"Huruf Ra yang berharakat KASRAH itu dibacanya TEBAL.\" Menurutmu, mana yang benar?",
+    options: [
+      "Ra berharakat kasrah dibaca TIPIS",
+      "Ra berharakat kasrah memang dibaca TEBAL, Rina benar"
+    ],
+    correct: 0
+  },
+  {
+    type: "table",
+    tag: "Isi Tabel",
+    icon: "1f4d6",
+    title: "Kartu Bacaan Tajwid",
+    story: "Perhatikan kata ini: <span class='arabic'>رَبَّنَا</span> — huruf Ra di situ berharakat FATHAH. Tentukan hukum bacaan dan tipis/tebalnya.",
+    rows: [
+      { arabic: "رَبَّنَا (Ra berharakat fathah)", hukum: "Ra Tafkhim", tipe: "Tebal" }
+    ],
+    hukumOptions: ["Ra Tafkhim", "Ra Tarqiq"],
+    tipeOptions: ["Tebal", "Tipis"]
+  },
+  {
+    type: "mc",
+    tag: "Tebakan Lucu",
+    icon: "1f604",
+    title: "Tebak-Tebakan Tajwid",
+    story: "Aku berlaku untuk mim sukun (مْ). Aku muncul kalau mim sukun bertemu huruf hijaiyah lain, selain mim dan ba. Aku dibaca jelas, tanpa dengung. Siapakah aku?",
+    options: ["Idhar Syafawi", "Ikhfa Syafawi", "Idgham Mimi"],
+    correct: 0
+  },
+  {
+    type: "mc",
+    tag: "Renungkan",
+    icon: "1f4ad",
+    title: "Renungkan Sejenak",
+    story: "Menurutmu, kenapa penting membaca huruf Ra dengan tepat (tipis atau tebal) saat mengaji?",
+    options: [
+      "Supaya bacaannya sesuai contoh Rasulullah dan tidak mengubah keindahan Al-Qur'an",
+      "Tidak penting, boleh dibaca sembarang saja",
+      "Hanya supaya terdengar keren saat mengaji"
+    ],
+    correct: 0
+  },
+  {
+    type: "path",
+    tag: "Mini Game",
+    icon: "1f5fa",
+    title: "Petualangan Sang Musafir Tajwid",
+    story: "Kamu menemukan huruf <b>Ra berharakat DHOMMAH</b>. Pilih jalur yang benar!",
+    steps: [
+      { q: "Ra berharakat dhommah dibaca...", options: ["Tebal (tafkhim)", "Tipis (tarqiq)"], correct: 0 },
+      { q: "Cara membacanya yang tepat...", options: ["Mulut membulat, suara berat", "Mulut mendatar, suara ringan"], correct: 0 }
+    ]
+  }
+];
+
+const SCORED_TOTAL = 10; // semua soal sekarang berupa pilihan (tap/klik), bisa dinilai otomatis
+
+let currentQ = 0;
+let score = 0;
+let answers = [];
+let studentName = "";
+
+const screenName = document.getElementById('screenName');
+const screenQuiz = document.getElementById('screenQuiz');
+const screenResult = document.getElementById('screenResult');
+const qBody = document.getElementById('qBody');
+const feedback = document.getElementById('feedback');
+
+document.getElementById('startBtn').addEventListener('click', () => {
+  const nama = document.getElementById('namaInput').value.trim();
+  if (nama.length < 2) {
+    document.getElementById('namaInput').style.borderColor = 'var(--red)';
+    return;
+  }
+  studentName = nama;
+  screenName.classList.add('hidden');
+  screenQuiz.classList.remove('hidden');
+  loadQuestion();
+});
+
+function updateProgress() {
+  document.getElementById('progressText').textContent = 'Soal ' + (currentQ + 1) + ' dari ' + questions.length;
+  document.getElementById('bar').style.width = Math.round((currentQ / questions.length) * 100) + '%';
+}
+
+function goNext(isCorrect, msg) {
+  answers.push(isCorrect);
+  if (isCorrect) score++;
+  const icon = isCorrect ? stiker('2705', 18, 'benar') : stiker('274c', 18, 'salah');
+  feedback.innerHTML = icon + ' ' + msg;
+  feedback.className = 'feedback ' + (isCorrect ? 'ok' : 'no');
+  setTimeout(() => {
+    currentQ++;
+    if (currentQ < questions.length) loadQuestion();
+    else finishQuiz();
+  }, 1100);
+}
+
+function loadQuestion() {
+  const q = questions[currentQ];
+  updateProgress();
+  feedback.innerHTML = '';
+  feedback.className = 'feedback';
+  document.getElementById('qType').textContent = q.tag;
+  document.getElementById('qTitle').innerHTML = stiker(q.icon, 24, q.title) + '<span>' + q.title + '</span>';
+  qBody.innerHTML = '';
+
+  const storyBox = document.createElement('div');
+  storyBox.className = 'story-box';
+  storyBox.innerHTML = q.story;
+  qBody.appendChild(storyBox);
+
+  if (q.type === 'mc') renderMC(q);
+  else if (q.type === 'match') renderMatch(q);
+  else if (q.type === 'tf') renderTF(q);
+  else if (q.type === 'multi') renderMulti(q);
+  else if (q.type === 'table') renderTable(q);
+  else if (q.type === 'path') renderPath(q);
+}
+
+// ---------- Pilihan Ganda ----------
+function renderMC(q) {
+  q.options.forEach((opt, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.textContent = opt;
+    btn.onclick = () => {
+      Array.from(qBody.querySelectorAll('.opt-btn')).forEach(b => b.disabled = true);
+      const isCorrect = idx === q.correct;
+      btn.classList.add(isCorrect ? 'correct' : 'wrong');
+      if (!isCorrect) qBody.querySelectorAll('.opt-btn')[q.correct].classList.add('correct');
+      goNext(isCorrect, isCorrect ? 'Tepat sekali!' : 'Kurang tepat, lihat jawaban hijau ya');
+    };
+    qBody.appendChild(btn);
+  });
+}
+
+// ---------- Cocokkan Pasangan ----------
+function renderMatch(q) {
+  const table = document.createElement('table');
+  table.className = 'match-table';
+  q.pairs.forEach((pair, idx) => {
+    const tr = document.createElement('tr');
+    const tdLeft = document.createElement('td');
+    tdLeft.textContent = pair.left;
+    const tdRight = document.createElement('td');
+    const sel = document.createElement('select');
+    sel.dataset.idx = idx;
+    const optDefault = document.createElement('option');
+    optDefault.textContent = '-- pilih --';
+    optDefault.value = '';
+    sel.appendChild(optDefault);
+    q.options.forEach(opt => {
+      const o = document.createElement('option');
+      o.textContent = opt;
+      o.value = opt;
+      sel.appendChild(o);
+    });
+    tdRight.appendChild(sel);
+    tr.appendChild(tdLeft);
+    tr.appendChild(tdRight);
+    table.appendChild(tr);
+  });
+  qBody.appendChild(table);
+
+  const warnEl = document.createElement('div');
+  warnEl.className = 'warn-msg';
+  qBody.appendChild(warnEl);
+  table.querySelectorAll('select').forEach(sel => { sel.onchange = () => { warnEl.innerHTML = ''; }; });
+
+  const btn = document.createElement('button');
+  btn.className = 'btn';
+  btn.textContent = 'Cocokkan';
+  btn.onclick = () => {
+    const selects = table.querySelectorAll('select');
+    const belumLengkap = Array.from(selects).some(sel => sel.value === '');
+    if (belumLengkap) {
+      warnEl.innerHTML = stiker('26a0', 16, 'peringatan') + ' Isi semua pasangan dulu sebelum lanjut, ya!';
+      return;
+    }
+    let allCorrect = true;
+    selects.forEach((sel, idx) => {
+      if (sel.value !== q.pairs[idx].correct) allCorrect = false;
+      sel.disabled = true;
+    });
+    btn.disabled = true;
+    goNext(allCorrect, allCorrect ? 'Semua cocok!' : 'Ada yang belum pas, cek lagi ya');
+  };
+  qBody.appendChild(btn);
+}
+
+// ---------- Benar / Salah ----------
+function renderTF(q) {
+  const btnTrue = document.createElement('button');
+  btnTrue.className = 'opt-btn';
+  btnTrue.innerHTML = stiker('2705', 20, 'benar', ) + '<span>Benar</span>';
+  const btnFalse = document.createElement('button');
+  btnFalse.className = 'opt-btn';
+  btnFalse.innerHTML = stiker('274c', 20, 'salah') + '<span>Salah</span>';
+
+  function handle(choice) {
+    btnTrue.disabled = true;
+    btnFalse.disabled = true;
+    const isCorrect = choice === q.correct;
+    (choice ? btnTrue : btnFalse).classList.add(isCorrect ? 'correct' : 'wrong');
+    if (!isCorrect) (q.correct ? btnTrue : btnFalse).classList.add('correct');
+    goNext(isCorrect, isCorrect ? 'Tepat!' : 'Kurang tepat');
+  }
+  btnTrue.onclick = () => handle(true);
+  btnFalse.onclick = () => handle(false);
+  qBody.appendChild(btnTrue);
+  qBody.appendChild(btnFalse);
+}
+
+// ---------- Pilih Jawaban Benar (multi-select) ----------
+function renderMulti(q) {
+  const selected = new Set();
+  const buttons = [];
+
+  q.options.forEach((opt, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.textContent = opt;
+    btn.onclick = () => {
+      if (selected.has(idx)) {
+        selected.delete(idx);
+        btn.classList.remove('selected');
+      } else {
+        selected.add(idx);
+        btn.classList.add('selected');
+      }
+      warnEl.innerHTML = '';
+    };
+    buttons.push(btn);
+    qBody.appendChild(btn);
+  });
+
+  const warnEl = document.createElement('div');
+  warnEl.className = 'warn-msg';
+  qBody.appendChild(warnEl);
+
+  const checkBtn = document.createElement('button');
+  checkBtn.className = 'btn';
+  checkBtn.textContent = 'Periksa Jawaban';
+  checkBtn.onclick = () => {
+    if (selected.size === 0) {
+      warnEl.innerHTML = stiker('26a0', 16, 'peringatan') + ' Pilih dulu jawabannya sebelum lanjut, ya!';
+      return;
+    }
+    buttons.forEach(b => b.disabled = true);
+    checkBtn.disabled = true;
+    const selectedArr = Array.from(selected).sort();
+    const correctArr = [...q.correctIndexes].sort();
+    const isCorrect = JSON.stringify(selectedArr) === JSON.stringify(correctArr);
+    buttons.forEach((b, idx) => {
+      if (q.correctIndexes.includes(idx)) b.classList.add('correct');
+      else if (selected.has(idx)) b.classList.add('wrong');
+    });
+    goNext(isCorrect, isCorrect ? 'Tepat, itu pernyataan yang benar!' : 'Belum semua tepat, lihat jawaban hijau ya');
+  };
+  qBody.appendChild(checkBtn);
+}
+
+// ---------- Isi Tabel ----------
+function renderTable(q) {
+  const table = document.createElement('table');
+  table.className = 'match-table';
+  q.rows.forEach((row, idx) => {
+    const tr1 = document.createElement('tr');
+    const tdAr = document.createElement('td');
+    tdAr.colSpan = 2;
+    tdAr.innerHTML = '<div class="arabic">' + row.arabic + '</div>';
+    tr1.appendChild(tdAr);
+    table.appendChild(tr1);
+
+    const tr2 = document.createElement('tr');
+    const tdHukum = document.createElement('td');
+    const selHukum = document.createElement('select');
+    selHukum.dataset.idx = idx;
+    selHukum.dataset.field = 'hukum';
+    const opt0 = document.createElement('option'); opt0.textContent = '-- hukum bacaan --'; opt0.value=''; selHukum.appendChild(opt0);
+    q.hukumOptions.forEach(o => { const el = document.createElement('option'); el.textContent = o; el.value = o; selHukum.appendChild(el); });
+    tdHukum.appendChild(selHukum);
+
+    const tdTipe = document.createElement('td');
+    const selTipe = document.createElement('select');
+    selTipe.dataset.idx = idx;
+    selTipe.dataset.field = 'tipe';
+    const optT0 = document.createElement('option'); optT0.textContent = '-- tipis/tebal --'; optT0.value=''; selTipe.appendChild(optT0);
+    q.tipeOptions.forEach(o => { const el = document.createElement('option'); el.textContent = o; el.value = o; selTipe.appendChild(el); });
+    tdTipe.appendChild(selTipe);
+
+    tr2.appendChild(tdHukum);
+    tr2.appendChild(tdTipe);
+    table.appendChild(tr2);
+  });
+  qBody.appendChild(table);
+
+  const warnEl = document.createElement('div');
+  warnEl.className = 'warn-msg';
+  qBody.appendChild(warnEl);
+  table.querySelectorAll('select').forEach(sel => { sel.onchange = () => { warnEl.innerHTML = ''; }; });
+
+  const btn = document.createElement('button');
+  btn.className = 'btn';
+  btn.textContent = 'Periksa Jawaban';
+  btn.onclick = () => {
+    const selects = table.querySelectorAll('select');
+    const belumLengkap = Array.from(selects).some(sel => sel.value === '');
+    if (belumLengkap) {
+      warnEl.innerHTML = stiker('26a0', 16, 'peringatan') + ' Isi semua kolom dulu sebelum lanjut, ya!';
+      return;
+    }
+    let allCorrect = true;
+    q.rows.forEach((row, idx) => {
+      const selHukum = table.querySelector('select[data-field="hukum"][data-idx="' + idx + '"]');
+      const selTipe = table.querySelector('select[data-field="tipe"][data-idx="' + idx + '"]');
+      if (selHukum.value !== row.hukum || selTipe.value !== row.tipe) allCorrect = false;
+      selHukum.disabled = true;
+      selTipe.disabled = true;
+    });
+    btn.disabled = true;
+    goNext(allCorrect, allCorrect ? 'Semua tepat!' : 'Ada yang belum sesuai, cek lagi ya');
+  };
+  qBody.appendChild(btn);
+}
+
+// ---------- Mini Game Jalur ----------
+function renderPath(q) {
+  let stepIdx = 0;
+  let pathCorrect = true;
+
+  function renderStep() {
+    qBody.querySelectorAll('.path-dynamic').forEach(el => el.remove());
+    if (stepIdx >= q.steps.length) {
+      goNext(pathCorrect, pathCorrect ? 'Sampai tujuan dengan benar!' : 'Ada langkah yang keliru di jalan');
+      return;
+    }
+    const step = q.steps[stepIdx];
+    const label = document.createElement('div');
+    label.className = 'path-step path-dynamic';
+    label.textContent = 'Langkah ' + (stepIdx + 1) + ': ' + step.q;
+    qBody.appendChild(label);
+
+    step.options.forEach((opt, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn path-dynamic';
+      btn.textContent = opt;
+      btn.onclick = () => {
+        if (idx !== step.correct) pathCorrect = false;
+        stepIdx++;
+        renderStep();
+      };
+      qBody.appendChild(btn);
+    });
+  }
+  renderStep();
+}
+
+// ================== KIRIM HASIL ==================
+async function finishQuiz() {
+  document.getElementById('bar').style.width = '100%';
+  screenQuiz.classList.add('hidden');
+  screenResult.classList.remove('hidden');
+
+  const nilai = Math.round((score / SCORED_TOTAL) * 100);
+  const tier = nilai >= 90 ? { code: '1f3c6', alt: 'juara' }
+             : nilai >= 70 ? { code: '1f389', alt: 'senang' }
+             : nilai >= 50 ? { code: '1f44d', alt: 'lumayan' }
+             : { code: '1f4aa', alt: 'semangat' };
+  document.getElementById('resultEmoji').innerHTML = stiker(tier.code, 72, tier.alt).replace('vertical-align:middle;', '');
+  document.getElementById('resultScore').textContent = nilai;
+  document.getElementById('resultDetail').textContent = 'Benar ' + score + ' dari ' + SCORED_TOTAL + ' soal — ' + studentName;
+
+  const statusEl = document.getElementById('submitStatus');
+  statusEl.textContent = 'Menyimpan nilai...';
+  statusEl.className = 'status';
+
+  const record = {
+    nama: studentName,
+    skor: score,
+    total: SCORED_TOTAL,
+    nilai: nilai,
+    waktu: new Date().toLocaleString('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+  };
+
+  try {
+    await fetch(SHEET_WEBAPP_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(record)
+    });
+    statusEl.innerHTML = stiker('2705', 16, 'terkirim') + ' Nilai terkirim ke guru.';
+    statusEl.className = 'status ok';
+  } catch (e) {
+    statusEl.innerHTML = stiker('274c', 16, 'gagal') + ' Gagal mengirim nilai. Cek koneksi internet lalu ulangi kuis.';
+    statusEl.className = 'status err';
+  }
+}
+</script>
+</body>
+</html>
