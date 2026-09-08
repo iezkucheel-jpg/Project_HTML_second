@@ -161,10 +161,21 @@ button,input{font:inherit}
 /* Home screen */
 .home{
   position:absolute;inset:0;
-  padding:75px 22px 20px;
+  padding:0;
   color:#fff;
+  overflow:hidden;
   transition:opacity .35s,transform .45s cubic-bezier(.22,1,.36,1);
 }
+/* Area layar utama dapat digeser vertikal, dock tetap diam */
+.home-scroll{
+  position:absolute;top:75px;left:22px;right:22px;bottom:104px;
+  overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+  scrollbar-width:none;touch-action:pan-y;padding-bottom:22px;
+}
+.home-scroll::-webkit-scrollbar{display:none}
+@media(max-height:720px){.home-scroll{top:62px;bottom:100px;left:18px;right:18px}}
+@media(max-height:620px){.home-scroll{top:55px;bottom:96px;left:16px;right:16px}}
 .home.hide{
   opacity:0;transform:scale(1.06);pointer-events:none;
 }
@@ -692,7 +703,7 @@ const questions=[
   pairs:[
    {left:"Ra berharakat KASRAH",correct:"Dibaca Tarqiq (tipis)"},
    {left:"Ra berharakat FATHAH",correct:"Dibaca Tafkhim (tebal)"},
-   {left:"Mim sukun bertemu huruf selain mim dan ba",correct:"Dibaca Idhar Syafawi (jelas)"}],
+   {left:"Mim sukun bertemu huruf lain",correct:"Dibaca Idhar Syafawi (jelas)"}],
   options:["Dibaca Tarqiq (tipis)","Dibaca Tafkhim (tebal)","Dibaca Idhar Syafawi (jelas)"]},
  {type:"tf",tag:"Benar / Salah",icon:"✅",title:"Benar atau Keliru?",
   story:"Pernyataan: <b>\"Idhar Syafawi itu dibaca dengan JELAS, tanpa dengung.\"</b>",correct:true},
@@ -802,6 +813,21 @@ document.getElementById("lockScreen").onkeydown=e=>{
    showPin();
  }
 };
+
+/* ============================================================
+   SCROLL BERANDA — konten di atas dock dapat digeser vertikal
+   Dock tetap terkunci di bawah layar.
+   ============================================================ */
+const homeScreenEl=document.getElementById("homeScreen");
+if(homeScreenEl && !homeScreenEl.querySelector(".home-scroll")){
+  const scrollBox=document.createElement("div");
+  scrollBox.className="home-scroll";
+  const dockEl=homeScreenEl.querySelector(".dock");
+  Array.from(homeScreenEl.children).forEach(child=>{
+    if(child!==dockEl) scrollBox.appendChild(child);
+  });
+  homeScreenEl.insertBefore(scrollBox,dockEl);
+}
 
 /* ============================================================
    INTERAKSI BERANDA
