@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#163b2f">
+  <title>Tahsin Al-Qur'an Interaktif</title>
+
+  <style>
+    /* =========================================================
+       STYLE UMUM
+       ========================================================= */
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #111;
+    }
+
+    body {
+      color: #fff;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    /* =========================================================
+       TAHAP 1 — LAYAR AWAL / FORM NAMA
+       ========================================================= */
+
+    #app {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      background: #111;
+    }
+
+    /* Semua visual kelas dibuat blur saat form awal tampil */
+    #classroom {
+      position: absolute;
+      inset: 0;
+      filter: blur(8px);
+      transform: scale(1.04);
+      transition: filter 1s ease, transform 1s ease;
+    }
+
+    /* Setelah nama dikirim, blur dihilangkan */
+    #classroom.clear {
+      filter: blur(0);
+      transform: scale(1);
+    }
+
+    .classroom-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    /* Lapisan sedikit gelap agar karakter/materi lebih jelas */
+    .classroom-shade {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.10);
+      pointer-events: none;
+    }
+
+    /* =========================================================
+       TAHAP 3 — KARAKTER & MATERI
+       Posisi menggunakan vw/vh agar responsif.
+       ========================================================= */
+
+    .teacher {
+      position: absolute;
+      bottom: 0;
+      z-index: 3;
+      width: clamp(20vw, 27vw, 34vw);
+      max-height: 88vh;
+      object-fit: contain;
+      object-position: bottom center;
+      transition:
+        transform 0.25s ease,
+        filter 0.25s ease;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    #ustadzah {
+      left: 1.5vw;
+    }
+
+    #ustad {
+      right: 1.5vw;
+    }
+
+    /*
+      Materi berada di tengah papan.
+      Width memakai vw agar tetap proporsional di HP.
+    */
+    #materi {
+      position: absolute;
+      z-index: 2;
+      left: 50%;
+      top: 49%;
+      width: clamp(25vw, 34vw, 42vw);
+      max-height: 61vh;
+      object-fit: contain;
+      transform: translate(-50%, -50%) rotate(-0.4deg);
+      border: 0.35vw solid rgba(90, 65, 35, 0.75);
+      box-shadow:
+        0 0.8vw 2vw rgba(0,0,0,0.35),
+        0 0 0 0.25vw rgba(255,255,255,0.45);
+      transition:
+        transform 0.7s ease,
+        filter 0.7s ease,
+        box-shadow 0.7s ease;
+    }
+
+    /* Highlight materi ketika audio materi diputar */
+    #materi.highlight {
+      transform: translate(-50%, -50%) rotate(-0.4deg) scale(1.045);
+      filter: brightness(1.08);
+      box-shadow:
+        0 0 2vw rgba(255, 235, 130, 0.9),
+        0 0 4vw rgba(255, 220, 80, 0.45),
+        0 0.8vw 2vw rgba(0,0,0,0.35);
+    }
+
+    /* Sapaan di atas papan */
+    #greeting {
+      position: absolute;
+      z-index: 4;
+      top: 4.5%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(70vw, 720px);
+      text-align: center;
+      font-weight: 700;
+      font-size: clamp(1rem, 2.5vw, 2rem);
+      color: #fff;
+      text-shadow:
+        0 2px 4px rgba(0,0,0,0.8),
+        0 0 10px rgba(0,0,0,0.45);
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      pointer-events: none;
+    }
+
+    #greeting.visible {
+      opacity: 1;
+    }
+
+    /* =========================================================
+       INDIKATOR USTADZ SEDANG BERBICARA
+       ========================================================= */
+
+    #ustad.speaking {
+      animation: ustadSpeak 0.9s ease-in-out infinite alternate;
+      filter: drop-shadow(0 0 1vw rgba(255, 235, 130, 0.95));
+    }
+
+    @keyframes ustadSpeak {
+      from {
+        transform: translateY(0) scale(1);
+      }
+      to {
+        transform: translateY(-0.5vh) scale(1.012);
+      }
+    }
+
+    #voiceBubble {
+      position: absolute;
+      z-index: 5;
+      right: 23vw;
+      bottom: 47%;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.92);
+      color: #174b39;
+      font-size: clamp(0.7rem, 1.5vw, 1rem);
+      font-weight: 700;
+      box-shadow: 0 0.4vw 1vw rgba(0,0,0,0.25);
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      pointer-events: none;
+    }
+
+    #voiceBubble.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .sound-bars {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      height: 1em;
+    }
+
+    .sound-bars span {
+      display: block;
+      width: 3px;
+      height: 0.55em;
+      background: currentColor;
+      border-radius: 3px;
+      animation: sound 0.65s ease-in-out infinite alternate;
+    }
+
+    .sound-bars span:nth-child(2) {
+      animation-delay: 0.15s;
+      height: 0.9em;
+    }
+
+    .sound-bars span:nth-child(3) {
+      animation-delay: 0.3s;
+      height: 0.7em;
+    }
+
+    @keyframes sound {
+      to { transform: scaleY(0.35); }
+    }
+
+    /* =========================================================
+       PANEL KONTROL AUDIO
+       ========================================================= */
+
+    #audioPanel {
+      position: absolute;
+      z-index: 10;
+      left: 50%;
+      bottom: 2.5%;
+      transform: translateX(-50%);
+      width: min(90vw, 650px);
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+
+    #audioPanel.visible {
+      opacity: 1;
+    }
+
+    #statusText {
+      display: inline-block;
+      margin-bottom: 0.5rem;
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.62);
+      font-size: clamp(0.7rem, 1.5vw, 0.95rem);
+    }
+
+    #continueBtn {
+      display: none;
+      border: 0;
+      padding: 0.75rem 2rem;
+      border-radius: 999px;
+      background: #f2c94c;
+      color: #1d321f;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 0.5vw 1.5vw rgba(0,0,0,0.3);
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    #continueBtn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+    }
+
+    #continueBtn:active {
+      transform: translateY(0);
+    }
+
+    /* =========================================================
+       TAHAP 1 — OVERLAY FORM
+       Overlay TIDAK ikut blur.
+       ========================================================= */
+
+    #nameOverlay {
+      position: absolute;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5vw;
+      background: rgba(0, 0, 0, 0.30);
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    #nameOverlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .name-card {
+      width: min(92vw, 480px);
+      padding: clamp(1.5rem, 5vw, 3rem);
+      border-radius: 1.5rem;
+      background: rgba(255,255,255,0.95);
+      color: #173629;
+      text-align: center;
+      box-shadow: 0 1.5rem 4rem rgba(0,0,0,0.35);
+    }
+
+    .name-card h1 {
+      margin: 0 0 0.65rem;
+      font-size: clamp(1.35rem, 5vw, 2.15rem);
+    }
+
+    .name-card p {
+      margin: 0 0 1.5rem;
+      color: #52645a;
+      line-height: 1.5;
+      font-size: clamp(0.85rem, 2.8vw, 1rem);
+    }
+
+    #nameForm {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    #studentName {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border: 2px solid #cbd8d0;
+      border-radius: 0.8rem;
+      outline: none;
+      color: #173629;
+      background: #fff;
+    }
+
+    #studentName:focus {
+      border-color: #317a5c;
+      box-shadow: 0 0 0 3px rgba(49,122,92,0.12);
+    }
+
+    #startBtn {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border: 0;
+      border-radius: 0.8rem;
+      background: #317a5c;
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    #startBtn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    #startBtn:not(:disabled):hover {
+      transform: translateY(-1px);
+    }
+
+    /* =========================================================
+       TAHAP 5 — PLACEHOLDER
+       ========================================================= */
+
+    #stage5Placeholder {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 5vw;
+      background: rgba(0,0,0,0.65);
+    }
+
+    #stage5Placeholder.visible {
+      display: flex;
+    }
+
+    .placeholder-card {
+      width: min(92vw, 600px);
+      padding: 2rem;
+      border-radius: 1.2rem;
+      background: #fff;
+      color: #173629;
+      text-align: center;
+    }
+
+    .placeholder-card h2 {
+      margin-top: 0;
+    }
+
+    /* =========================================================
+       RESPONSIVE HP
+       ========================================================= */
+
+    @media (max-width: 700px) {
+      .teacher {
+        width: 34vw;
+        max-height: 62vh;
+      }
+
+      #ustadzah {
+        left: -1vw;
+      }
+
+      #ustad {
+        right: -1vw;
+      }
+
+      #materi {
+        width: 41vw;
+        max-height: 48vh;
+        top: 47%;
+      }
+
+      #greeting {
+        top: 5%;
+        width: 72vw;
+        font-size: clamp(0.85rem, 3.4vw, 1.25rem);
+      }
+
+      #voiceBubble {
+        right: 31vw;
+        bottom: 43%;
+        padding: 0.35rem 0.55rem;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .teacher {
+        width: 37vw;
+        max-height: 58vh;
+      }
+
+      #materi {
+        width: 42vw;
+      }
+
+      #voiceBubble {
+        right: 32vw;
+        bottom: 39%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+
+    <!-- =======================================================
+         TAHAP 3 — LAYAR KELAS
+         Seluruh visual ini ikut blur pada TAHAP 1.
+         ======================================================= -->
+    <main id="classroom">
+
+      <!-- Background kelas -->
+      <img
+        class="classroom-bg"
+        src="papan_tulis.jpg"
+        alt="Ruang kelas dengan papan tulis"
+      >
+
+      <div class="classroom-shade"></div>
+
+      <!-- Sapaan personal -->
+      <div id="greeting">Selamat belajar!</div>
+
+      <!-- Materi tajwid di tengah papan -->
+      <img
+        id="materi"
+        src="materi_jilid.jpg"
+        alt="Materi pembelajaran tajwid"
+      >
+
+      <!-- Guru perempuan di kiri -->
+      <img
+        id="ustadzah"
+        class="teacher"
+        src="gambar_ustadzah.png"
+        alt="Ustadzah"
+      >
+
+      <!-- Guru laki-laki di kanan -->
+      <img
+        id="ustad"
+        class="teacher"
+        src="gambar_ustad.png"
+        alt="Ustad"
+      >
+
+      <!-- Indikator suara ustad -->
+      <div id="voiceBubble" aria-live="polite">
+        <span class="sound-bars" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+        Ustad sedang berbicara
+      </div>
+
+      <!-- Kontrol/status audio -->
+      <div id="audioPanel">
+        <div id="statusText">Menyiapkan pembelajaran...</div>
+        <br>
+        <button id="continueBtn" type="button">Lanjut</button>
+      </div>
+    </main>
+
+    <!-- =======================================================
+         TAHAP 1 — FORM NAMA
+         Overlay ini sengaja berada DI LUAR #classroom,
+         sehingga tidak terkena filter blur.
+         ======================================================= -->
+    <section id="nameOverlay">
+      <div class="name-card">
+        <h1>Selamat Datang 👋</h1>
+        <p>
+          Yuk belajar Tahsin Al-Qur'an bersama.
+          Masukkan nama lengkapmu untuk memulai.
+        </p>
+
+        <form id="nameForm">
+          <input
+            id="studentName"
+            type="text"
+            placeholder="Nama Lengkap Siswa"
+            autocomplete="name"
+            minlength="3"
+            required
+          >
+          <button id="startBtn" type="submit" disabled>
+            Mulai Belajar
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         TAHAP 5 — PLACEHOLDER
+         Belum ada perekaman audio siswa.
+         ======================================================= -->
+    <section id="stage5Placeholder">
+      <div class="placeholder-card">
+        <h2>Tahap Perekaman</h2>
+        <p>
+          Placeholder Tahap 5.<br>
+          Mekanisme perekaman dan pengiriman audio siswa
+          akan dikembangkan berikutnya.
+        </p>
+        <button type="button" id="backPlaceholderBtn">
+          Kembali
+        </button>
+      </div>
+    </section>
+
+    <!-- =======================================================
+         TAHAP 4 — AUDIO
+         OPSI A: FILE AUDIO LOKAL
+
+         File audio diletakkan di:
+         /audio/audio_1_salam.m4a
+         /audio/audio_2_instruksi.m4a
+         /audio/audio_3_materi.m4a
+         /audio/audio_4_penutup.m4a
+         ======================================================= -->
+
+    <audio id="audio1" preload="auto" src="audio/audio_1_salam.m4a"></audio>
+    <audio id="audio2" preload="auto" src="audio/audio_2_instruksi.m4a"></audio>
+    <audio id="audio3" preload="auto" src="audio/audio_3_materi.m4a"></audio>
+    <audio id="audio4" preload="auto" src="audio/audio_4_penutup.m4a"></audio>
+
+  </div>
+
+  <script>
+    "use strict";
+
+    /* =========================================================
+       VARIABEL GLOBAL
+       ========================================================= */
+
+    // Nama siswa disimpan setelah form berhasil dikirim.
+    let namaSiswa = "";
+
+    // Index audio yang sedang diputar: 0 sampai 3.
+    let currentAudioIndex = 0;
+
+    // Daftar audio Tahap 4.
+    const audioList = [
+      document.getElementById("audio1"),
+      document.getElementById("audio2"),
+      document.getElementById("audio3"),
+      document.getElementById("audio4")
+    ];
+
+    // Elemen tampilan.
+    const classroom = document.getElementById("classroom");
+    const nameOverlay = document.getElementById("nameOverlay");
+    const nameForm = document.getElementById("nameForm");
+    const studentNameInput = document.getElementById("studentName");
+    const startBtn = document.getElementById("startBtn");
+
+    const greeting = document.getElementById("greeting");
+    const ustad = document.getElementById("ustad");
+    const materi = document.getElementById("materi");
+    const voiceBubble = document.getElementById("voiceBubble");
+
+    const audioPanel = document.getElementById("audioPanel");
+    const statusText = document.getElementById("statusText");
+    const continueBtn = document.getElementById("continueBtn");
+
+    const stage5Placeholder = document.getElementById("stage5Placeholder");
+    const backPlaceholderBtn = document.getElementById("backPlaceholderBtn");
+
+
+    /* =========================================================
+       TAHAP 1 — VALIDASI NAMA
+       Tombol aktif hanya jika nama minimal 3 karakter.
+       ========================================================= */
+
+    function validasiNama() {
+      const nama = studentNameInput.value.trim();
+
+      // Array.from lebih aman untuk karakter Unicode.
+      const jumlahKarakter = Array.from(nama).length;
+
+      startBtn.disabled = jumlahKarakter < 3;
+    }
+
+    studentNameInput.addEventListener("input", validasiNama);
+
+
+    /* =========================================================
+       TAHAP 2 — TRANSISI SETELAH NAMA DIKIRIM
+       Blur 8px -> 0px berlangsung sekitar 1 detik.
+       Form menghilang dengan fade-out.
+       ========================================================= */
+
+    nameForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const nama = studentNameInput.value.trim();
+
+      if (Array.from(nama).length < 3) {
+        return;
+      }
+
+      // Simpan nama siswa untuk digunakan pada tahap berikutnya.
+      namaSiswa = nama;
+
+      // Personalisasi sapaan.
+      greeting.textContent = `Selamat belajar, ${namaSiswa}!`;
+
+      // Hilangkan overlay form.
+      nameOverlay.classList.add("hidden");
+
+      // Hilangkan blur visual kelas.
+      classroom.classList.add("clear");
+
+      // Tampilkan sapaan setelah transisi mulai.
+      setTimeout(function() {
+        greeting.classList.add("visible");
+      }, 500);
+
+      // Mulai panel/audio setelah transisi selesai.
+      setTimeout(function() {
+        audioPanel.classList.add("visible");
+        mulaiAudioBerurutan();
+      }, 1050);
+    });
+
+
+    /* =========================================================
+       TAHAP 3 — FUNGSI TAMPILAN KELAS
+       ========================================================= */
+
+    function setIndikatorUstad(aktif) {
+      ustad.classList.toggle("speaking", aktif);
+      voiceBubble.classList.toggle("visible", aktif);
+    }
+
+    function setHighlightMateri(aktif) {
+      materi.classList.toggle("highlight", aktif);
+    }
+
+
+    /* =========================================================
+       TAHAP 4 — PEMUTARAN AUDIO BERURUTAN
+
+       PENTING:
+       Audio berikutnya TIDAK menggunakan timer/delay.
+       Perpindahan dilakukan menggunakan event "ended".
+       ========================================================= */
+
+    function mulaiAudioBerurutan() {
+      currentAudioIndex = 0;
+      putarAudioKe(currentAudioIndex);
+    }
+
+    function putarAudioKe(index) {
+      // Jika seluruh audio sudah selesai.
+      if (index >= audioList.length) {
+        selesaiSemuaAudio();
+        return;
+      }
+
+      currentAudioIndex = index;
+
+      const audio = audioList[index];
+
+      // Pastikan audio lain berhenti.
+      audioList.forEach(function(item, i) {
+        if (i !== index) {
+          item.pause();
+          item.currentTime = 0;
+        }
+      });
+
+      // Ustad selalu menjadi indikator pembicara selama audio.
+      setIndikatorUstad(true);
+
+      // Hanya audio ke-3 yang menyorot materi.
+      setHighlightMateri(index === 2);
+
+      // Teks status.
+      const status = [
+        "Ustad sedang memberi salam dan sapaan...",
+        "Ustad sedang memberi instruksi...",
+        "Ustad sedang menjelaskan materi tajwid...",
+        "Ustad sedang memberi apresiasi dan penutup..."
+      ];
+
+      statusText.textContent = status[index];
+
+      // Event "ended" menjadi satu-satunya pemicu audio berikutnya.
+      audio.onended = function() {
+        putarAudioKe(index + 1);
+      };
+
+      // Tangani error audio.
+      audio.onerror = function() {
+        console.error("Gagal memuat audio:", audio.src);
+
+        statusText.textContent =
+          "Audio tidak dapat diputar. Periksa file dan folder /audio/.";
+
+        setIndikatorUstad(false);
+        setHighlightMateri(false);
+        continueBtn.style.display = "inline-block";
+        continueBtn.textContent = "Lanjut";
+      };
+
+      /*
+        Browser smartphone biasanya memblokir autoplay bersuara
+        jika pemutaran tidak berasal dari interaksi pengguna.
+
+        Karena "Mulai Belajar" adalah hasil klik pengguna,
+        pemutaran pertama dipanggil dari alur submit tersebut.
+      */
+      const playPromise = audio.play();
+
+      if (playPromise !== undefined) {
+        playPromise.catch(function(error) {
+          console.warn("Autoplay audio ditolak browser:", error);
+
+          statusText.textContent =
+            "Ketuk layar/tombol untuk mulai memutar audio.";
+
+          // Jika browser menolak autoplay, tampilkan tombol.
+          continueBtn.style.display = "inline-block";
+          continueBtn.textContent = "Putar Audio";
+
+          continueBtn.onclick = function() {
+            continueBtn.style.display = "none";
+            audio.play().catch(function(err) {
+              console.error("Audio tetap tidak dapat diputar:", err);
+            });
+          };
+        });
+      }
+    }
+
+
+    /* =========================================================
+       TAHAP 4 — SETELAH AUDIO KE-4 SELESAI
+       ========================================================= */
+
+    function selesaiSemuaAudio() {
+      setIndikatorUstad(false);
+      setHighlightMateri(false);
+
+      statusText.textContent =
+        `MasyaAllah, ${namaSiswa}! Pembelajaran awal sudah selesai.`;
+
+      continueBtn.style.display = "inline-block";
+      continueBtn.textContent = "Lanjut";
+
+      // Placeholder Tahap 5 akan dibuka melalui tombol ini.
+      continueBtn.onclick = function() {
+        bukaTahap5Placeholder();
+      };
+    }
+
+
+    /* =========================================================
+       TAHAP 5 — PLACEHOLDER
+       ========================================================= */
+
+    function bukaTahap5Placeholder() {
+      stage5Placeholder.classList.add("visible");
+    }
+
+    backPlaceholderBtn.addEventListener("click", function() {
+      stage5Placeholder.classList.remove("visible");
+    });
+
+
+    /* =========================================================
+       TAHAP 5 — FUNCTION KOSONG UNTUK PENGEMBANGAN BERIKUTNYA
+
+       JANGAN dipanggil otomatis.
+       Endpoint Google Apps Script sudah disiapkan.
+       ========================================================= */
+
+    async function kirimDataSiswa(namaSiswa, linkAudio) {
+      /*
+        Endpoint Google Apps Script:
+        https://script.google.com/macros/s/AKfycbz8TWEnHNhHR7RG4HAb72raYQ8u63bZHEMNSaFwfvs6vgve1-0PSO5NDAoQiMmtWnUSJg/exec
+
+        Payload:
+        {
+          nama: namaSiswa,
+          audio: linkAudio,
+          timestamp: new Date().toISOString()
+        }
+
+        Fungsi ini sengaja BELUM dipanggil otomatis.
+        Mekanisme MediaRecorder / upload audio siswa akan
+        dikembangkan pada Tahap 5 berikutnya.
+      */
+
+      const endpoint =
+        "https://script.google.com/macros/s/AKfycbz8TWEnHNhHR7RG4HAb72raYQ8u63bZHEMNSaFwfvs6vgve1-0PSO5NDAoQiMmtWnUSJg/exec";
+
+      const payload = {
+        nama: namaSiswa,
+        audio: linkAudio,
+        timestamp: new Date().toISOString()
+      };
+
+      return fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+    }
+
+  </script>
+</body>
+</html>
