@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>PS2 Vault — Retro Gaming Showcase</title>
+
+  <meta
+    name="description"
+    content="Koleksi game PlayStation 2 ikonik dalam showcase retro-modern."
+  />
+
+  <style>
+    /* =========================================================
+       PS2 VAULT — SINGLE FILE
+       HTML + CSS + JS
+       No external image assets
+    ========================================================= */
+
+    :root {
+      --bg: #07080d;
+      --bg-soft: #0d1018;
+      --panel: #111522;
+      --panel-2: #151a29;
+      --text: #f5f7ff;
+      --muted: #8f97aa;
+      --line: rgba(255,255,255,.08);
+
+      --cyan: #35e6ff;
+      --purple: #8d5cff;
+      --pink: #ff3cac;
+      --green: #63ff9b;
+      --yellow: #ffd45c;
+
+      --radius: 18px;
+      --container: 1180px;
+
+      --ease: cubic-bezier(.2,.8,.2,1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(53,230,255,.08), transparent 30%),
+        radial-gradient(circle at 90% 10%, rgba(141,92,255,.10), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .035;
+      background-image:
+        linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px);
+      background-size: 32px 32px;
+      z-index: -1;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(calc(100% - 32px), var(--container));
+      margin-inline: auto;
+    }
+
+    /* =========================================================
+       HEADER
+    ========================================================= */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid var(--line);
+      background: rgba(7,8,13,.82);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-weight: 900;
+      letter-spacing: -.04em;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(53,230,255,.45);
+      background: linear-gradient(135deg, rgba(53,230,255,.14), rgba(141,92,255,.16));
+      color: var(--cyan);
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 1000;
+      box-shadow: 0 0 24px rgba(53,230,255,.08);
+    }
+
+    .brand span {
+      font-size: 18px;
+    }
+
+    .brand small {
+      color: var(--cyan);
+      font-size: 9px;
+      letter-spacing: .15em;
+      margin-left: 4px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    nav a {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      transition: color .25s var(--ease);
+    }
+
+    nav a:hover {
+      color: var(--text);
+    }
+
+    /* =========================================================
+       HERO
+    ========================================================= */
+
+    .hero {
+      padding: 96px 0 58px;
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      align-items: center;
+      gap: 60px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--cyan);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 22px;
+      height: 2px;
+      background: var(--cyan);
+      box-shadow: 7px 0 0 var(--purple);
+    }
+
+    h1 {
+      max-width: 760px;
+      font-size: clamp(48px, 7vw, 88px);
+      line-height: .9;
+      letter-spacing: -.075em;
+      font-weight: 1000;
+    }
+
+    h1 .gradient {
+      background: linear-gradient(100deg, var(--cyan), #9d76ff 50%, var(--pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-copy {
+      max-width: 610px;
+      color: var(--muted);
+      margin-top: 25px;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: var(--panel);
+      font-weight: 800;
+      font-size: 13px;
+      transition:
+        transform .25s var(--ease),
+        border-color .25s var(--ease),
+        background .25s var(--ease);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(53,230,255,.4);
+      background: var(--panel-2);
+    }
+
+    .btn.primary {
+      border-color: transparent;
+      color: #061016;
+      background: linear-gradient(100deg, var(--cyan), #9a7bff);
+    }
+
+    .hero-console {
+      position: relative;
+      min-height: 330px;
+      display: grid;
+      place-items: center;
+    }
+
+    /* CSS-only retro console illustration */
+    .console {
+      width: min(100%, 410px);
+      aspect-ratio: 1.5;
+      position: relative;
+      transform: perspective(700px) rotateY(-9deg) rotateX(4deg);
+      transition: transform .6s var(--ease);
+    }
+
+    .console:hover {
+      transform: perspective(700px) rotateY(-3deg) rotateX(2deg) translateY(-5px);
+    }
+
+    .console-body {
+      position: absolute;
+      left: 6%;
+      right: 6%;
+      bottom: 12%;
+      height: 57%;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(145deg, #1b2030, #090b12);
+      box-shadow:
+        20px 28px 60px rgba(0,0,0,.5),
+        inset 0 1px rgba(255,255,255,.12);
+    }
+
+    .console-top {
+      position: absolute;
+      inset: 0 0 auto;
+      height: 45%;
+      border-radius: 22px 22px 10px 10px;
+      background: linear-gradient(145deg, #242a3b, #10131c);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .console-disc {
+      position: absolute;
+      width: 30%;
+      aspect-ratio: 1;
+      left: 35%;
+      top: 9%;
+      border-radius: 50%;
+      border: 7px solid #171b27;
+      background:
+        radial-gradient(circle, #0a0c12 0 8%, #464d5f 9% 10%, #171a25 11% 40%, #33394b 41% 43%, #141720 44%);
+      box-shadow: inset 0 0 12px #000;
+    }
+
+    .console-line {
+      position: absolute;
+      left: 13%;
+      right: 13%;
+      bottom: 23%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan), var(--purple), transparent);
+      opacity: .8;
+    }
+
+    .console-led {
+      position: absolute;
+      left: 14%;
+      bottom: 15%;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 15px var(--cyan);
+    }
+
+    .controller {
+      position: absolute;
+      right: -2%;
+      bottom: 2%;
+      width: 47%;
+      height: 28%;
+      border-radius: 50% 50% 35% 35%;
+      background: #151927;
+      border: 1px solid rgba(255,255,255,.1);
+      transform: rotate(8deg);
+      box-shadow: 12px 18px 30px rgba(0,0,0,.45);
+    }
+
+    .dpad {
+      position: absolute;
+      left: 19%;
+      top: 35%;
+      width: 15%;
+      aspect-ratio: 1;
+    }
+
+    .dpad::before,
+    .dpad::after {
+      content: "";
+      position: absolute;
+      background: #090b12;
+      border-radius: 3px;
+    }
+
+    .dpad::before {
+      width: 100%;
+      height: 32%;
+      top: 34%;
+    }
+
+    .dpad::after {
+      width: 32%;
+      height: 100%;
+      left: 34%;
+    }
+
+    .controller-buttons {
+      position: absolute;
+      right: 18%;
+      top: 28%;
+      display: grid;
+      grid-template-columns: repeat(2, 8px);
+      gap: 5px;
+    }
+
+    .controller-buttons i {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--cyan);
+    }
+
+    .controller-buttons i:nth-child(2) { background: var(--pink); }
+    .controller-buttons i:nth-child(3) { background: var(--yellow); }
+    .controller-buttons i:nth-child(4) { background: var(--green); }
+
+    /* =========================================================
+       STATS
+    ========================================================= */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 55px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      background: rgba(17,21,34,.55);
+      border-radius: 12px;
+      padding: 17px 20px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 24px;
+      letter-spacing: -.04em;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+
+    /* =========================================================
+       COLLECTION CONTROLS
+    ========================================================= */
+
+    .collection {
+      padding: 65px 0 100px;
+      scroll-margin-top: 70px;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(28px, 4vw, 42px);
+      letter-spacing: -.06em;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 6px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .search {
+      position: relative;
+    }
+
+    .search input {
+      width: 100%;
+      height: 48px;
+      border: 1px solid var(--line);
+      outline: none;
+      border-radius: 11px;
+      padding: 0 18px 0 44px;
+      background: rgba(17,21,34,.8);
+      color: var(--text);
+      transition: border-color .25s var(--ease);
+    }
+
+    .search input:focus {
+      border-color: rgba(53,230,255,.55);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 16px;
+      pointer-events: none;
+    }
+
+    .count {
+      height: 48px;
+      min-width: 110px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: rgba(17,21,34,.6);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 5px;
+    }
+
+    .filters::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter {
+      white-space: nowrap;
+      padding: 9px 13px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      transition: all .2s var(--ease);
+    }
+
+    .filter:hover,
+    .filter.active {
+      color: #071015;
+      border-color: transparent;
+      background: var(--cyan);
+    }
+
+    /* =========================================================
+       GAME GRID
+    ========================================================= */
+
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .game-card {
+      min-width: 0;
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(21,26,41,.9), rgba(11,14,23,.9));
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition:
+        transform .35s var(--ease),
+        border-color .35s var(--ease),
+        background .35s var(--ease);
+    }
+
+    .game-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(53,230,255,.34);
+      background: #151a29;
+    }
+
+    .game-card.hidden {
+      display: none;
+    }
+
+    /* =========================================================
+       CSS COVER ART
+    ========================================================= */
+
+    .cover {
+      position: relative;
+      height: 235px;
+      overflow: hidden;
+      isolation: isolate;
+      background: #10131c;
+    }
+
+    .cover::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, transparent 35%, rgba(0,0,0,.8)),
+        repeating-linear-gradient(
+          90deg,
+          transparent 0 18px,
+          rgba(255,255,255,.025) 19px
+        );
+      z-index: 1;
+    }
+
+    .cover::after {
+      content: "";
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      top: -50px;
+      right: -50px;
+      background: rgba(255,255,255,.08);
+      filter: blur(2px);
+    }
+
+    .cover-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 14px;
+      z-index: 2;
+    }
+
+    .cover-label {
+      font-size: 9px;
+      font-weight: 1000;
+      letter-spacing: .18em;
+      color: rgba(255,255,255,.7);
+    }
+
+    .cover-title {
+      font-size: 26px;
+      line-height: .9;
+      max-width: 90%;
+      letter-spacing: -.07em;
+      font-weight: 1000;
+      text-shadow: 0 3px 15px rgba(0,0,0,.6);
+    }
+
+    .cover-symbol {
+      position: absolute;
+      left: 50%;
+      top: 48%;
+      transform: translate(-50%,-50%);
+      font-size: 64px;
+      font-weight: 1000;
+      opacity: .25;
+      z-index: -1;
+      user-select: none;
+    }
+
+    .cover-blue {
+      background: linear-gradient(135deg,#061c30,#102d5b 48%,#070912);
+    }
+
+    .cover-purple {
+      background: linear-gradient(135deg,#16062c,#4a1f72 50%,#0b0815);
+    }
+
+    .cover-red {
+      background: linear-gradient(135deg,#28060a,#8d171e 52%,#10080b);
+    }
+
+    .cover-green {
+      background: linear-gradient(135deg,#062719,#17653c 52%,#07130c);
+    }
+
+    .cover-gold {
+      background: linear-gradient(135deg,#281b04,#927024 50%,#11100a);
+    }
+
+    .cover-pink {
+      background: linear-gradient(135deg,#2c0625,#9c287d 50%,#100712);
+    }
+
+    .cover-gray {
+      background: linear-gradient(135deg,#111722,#3a4354 52%,#090b10);
+    }
+
+    .cover-orange {
+      background: linear-gradient(135deg,#301405,#a85119 52%,#120907);
+    }
+
+    .cover-meta {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .cover-meta span {
+      font-size: 8px;
+      font-weight: 900;
+      padding: 5px 7px;
+      border-radius: 5px;
+      background: rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.12);
+    }
+
+    .card-body {
+      padding: 16px;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .card-title {
+      font-size: 16px;
+      line-height: 1.1;
+      letter-spacing: -.03em;
+    }
+
+    .year {
+      color: var(--cyan);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .genre {
+      display: inline-block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    .description {
+      color: #9ba3b5;
+      font-size: 11px;
+      line-height: 1.65;
+      margin-top: 12px;
+    }
+
+    /* =========================================================
+       EMPTY STATE
+    ========================================================= */
+
+    .empty {
+      display: none;
+      text-align: center;
+      padding: 70px 20px;
+      border: 1px dashed var(--line);
+      border-radius: 18px;
+      color: var(--muted);
+      margin-top: 22px;
+    }
+
+    .empty.show {
+      display: block;
+    }
+
+    .empty strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    /* =========================================================
+       FOOTER
+    ========================================================= */
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 28px 0;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .pixel {
+      font-family: monospace;
+      letter-spacing: .08em;
+    }
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 1000px) {
+      .game-grid {
+        grid-template-columns: repeat(3, minmax(0,1fr));
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-console {
+        min-height: 280px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav {
+        height: 62px;
+      }
+
+      nav {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 68px;
+      }
+
+      h1 {
+        font-size: clamp(45px, 15vw, 68px);
+      }
+
+      .hero-copy {
+        font-size: 13px;
+      }
+
+      .hero-console {
+        min-height: 230px;
+      }
+
+      .console {
+        width: 90%;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .game-grid {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+      }
+
+      .cover {
+        height: 205px;
+      }
+
+      .controls {
+        grid-template-columns: 1fr;
+      }
+
+      .count {
+        height: 40px;
+      }
+
+      .section-heading {
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .container {
+        width: min(calc(100% - 22px), var(--container));
+      }
+
+      .game-grid {
+        gap: 9px;
+      }
+
+      .cover {
+        height: 180px;
+      }
+
+      .cover-title {
+        font-size: 21px;
+      }
+
+      .card-body {
+        padding: 12px;
+      }
+
+      .description {
+        font-size: 10px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =======================================================
+       HEADER
+  ======================================================== -->
+  <header>
+    <div class="container nav">
+      <a href="#" class="brand" aria-label="PS2 Vault Home">
+        <div class="brand-mark">PS2</div>
+        <div>
+          <span>VAULT</span>
+          <small>2000s</small>
+        </div>
+      </a>
+
+      <nav>
+        <a href="#collection">Collection</a>
+        <a href="#about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+    <section class="hero">
+      <div class="container hero-grid">
+
+        <div>
+          <div class="eyebrow">PlayStation 2 Archive</div>
+
+          <h1>
+            THE GOLDEN ERA OF
+            <span class="gradient">GAMING.</span>
+          </h1>
+
+          <p class="hero-copy">
+            Jelajahi koleksi game PS2 paling ikonik dari era ketika
+            petualangan, horror, racing, RPG, dan action menjadi
+            bagian dari masa kecil jutaan gamer.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn primary" href="#collection">
+              Explore Collection →
+            </a>
+
+            <button class="btn" id="randomBtn">
+              ✦ Random Game
+            </button>
+          </div>
+
+          <div class="stats">
+            <div class="stat">
+              <strong>20</strong>
+              <span>Classic Titles</span>
+            </div>
+
+            <div class="stat">
+              <strong>2001–06</strong>
+              <span>Golden Era</span>
+            </div>
+
+            <div class="stat">
+              <strong>8+</strong>
+              <span>Genres</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-console" aria-hidden="true">
+          <div class="console">
+
+            <div class="console-body">
+              <div class="console-top">
+                <div class="console-disc"></div>
+                <div class="console-line"></div>
+                <div class="console-led"></div>
+              </div>
+            </div>
+
+            <div class="controller">
+              <div class="dpad"></div>
+
+              <div class="controller-buttons">
+                <i></i><i></i>
+                <i></i><i></i>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =====================================================
+         COLLECTION
+    ====================================================== -->
+    <section class="collection" id="collection">
+      <div class="container">
+
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">The Collection</div>
+            <h2>Legendary Titles</h2>
+            <p>20 game yang mendefinisikan generasi PlayStation 2.</p>
+          </div>
+        </div>
+
+        <div class="controls">
+          <label class="search">
+            <span class="search-icon">⌕</span>
+            <input
+              id="searchInput"
+              type="search"
+              placeholder="Cari judul game..."
+              autocomplete="off"
+            />
+          </label>
+
+          <div class="count" id="resultCount">
+            20 games
+          </div>
+        </div>
+
+        <div class="filters" id="filters">
+          <button class="filter active" data-filter="all">ALL</button>
+          <button class="filter" data-filter="Action">ACTION</button>
+          <button class="filter" data-filter="Adventure">ADVENTURE</button>
+          <button class="filter" data-filter="RPG">RPG</button>
+          <button class="filter" data-filter="Horror">HORROR</button>
+          <button class="filter" data-filter="Racing">RACING</button>
+          <button class="filter" data-filter="Stealth">STEALTH</button>
+          <button class="filter" data-filter="Fighting">FIGHTING</button>
+          <button class="filter" data-filter="Platformer">PLATFORMER</button>
+        </div>
+
+
+        <div class="game-grid" id="gameGrid">
+
+          <!-- 01 -->
+          <article class="game-card"
+            data-title="God of War"
+            data-genre="Action">
+            <div class="cover cover-red">
+              <div class="cover-inner">
+                <span class="cover-label">PLAYSTATION 2</span>
+                <span class="cover-symbol">Ω</span>
+                <strong class="cover-title">GOD<br>OF WAR</strong>
+                <div class="cover-meta">
+                  <span>ACTION</span>
+                  <span>2005</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3 class="card-title">God of War</h3>
+                <span class="year">2005</span>
+              </div>
+              <span class="genre">Action</span>
+              <p class="description">
+                Kratos memulai perjalanan balas dendamnya melawan para dewa Olympus dalam aksi penuh brutalitas dan mitologi.
+              </p>
+            </div>
+          </article>
+
+          <!-- 02 -->
+          <article class="game-card"
+            data-title="Shadow of the Colossus"
+            data-genre="Adventure">
+            <div class="cover cover-gray">
+              <div class="cover-inner">
+                <span class="cover-label">PLAYSTATION 2</span>
+                <span class="cover-symbol">◉</span>
+                <strong class="cover-title">SHADOW<br>OF THE<br>COLOSSUS</strong>
+                <div class="cover-meta">
+                  <span>ADVENTURE</span>
+                  <span>2005</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3 class="card-title">Shadow of the Colossus</h3>
+                <span class="year">2005</span>
+              </div>
+              <span class="genre">Adventure</span>
+              <p class="description">
+                Petualangan sunyi melintasi dunia misterius untuk menghadapi makhluk raksasa yang menjulang di atas tanah terlarang.
+              </p>
+            </div>
+          </article>
+
+          <!-- 03 -->
+          <article class="game-card"
+            data-title="Metal Gear Solid 3"
+            data-genre="Stealth">
+            <div class="cover cover-green">
+              <div class="cover-inner">
+                <span class="cover-label">PLAYSTATION 2</span>
+                <span class="cover-symbol">◆</span>
+                <strong class="cover-title">METAL<br>GEAR<br>SOLID 3</strong>
+                <div class="cover-meta">
+                  <span>STEALTH</span>
+                  <span>2004</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3 class="card-title">Metal Gear Solid 3</h3>
+                <span class="year">2004</span>
+              </div>
+              <span class="genre">Stealth</span>
+              <p class="description">
+                Naked Snake menjalankan misi rahasia di hutan Soviet dalam kisah spionase yang sinematik dan penuh intrik.
+              </p>
+            </div>
+          </article>
+
+          <!-- 04 -->
+          <article class="game-card"
+            data-title="Gran Turismo 4"
+            data-genre="Racing">
+            <div class="cover cover-blue">
+              <div class="cover-inner">
+                <span class="cover-label">PLAYSTATION 2</span>
+                <span class="cover-symbol">GT</span>
+                <strong class="cover-title">GRAN<br>TURISMO<br>4</strong>
+                <div class="cover-meta">
+                  <span>RACING</span>
+                  <span>2004</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3 class="card-title">Gran Turismo 4</h3>
+                <span class="year">2004</span>
+              </div>
+              <span class="genre">Racing</span>
+              <p class="description">
+                Simulator balap besar dengan ratusan kendaraan, lintasan beragam, dan pengalaman berkendara yang sangat detail untuk eranya.
+              </p>
+            </div>
+          </article>
+
+          <!-- 05 -->
+          <article class="game-card"
+            data-title="Final Fantasy X"
+            data-genre="RPG">
+            <div class="cover cover-blue">
+              <div class="cover-inner">
+                <span class="cover-label">PLAYSTATION 2</span>
+                <span class="cover-symbol">X</span>
+                <strong class="cover-title">FINAL<br>FANTASY X</strong>
+                <div class="cover-meta">
+                  <span>RPG</span>
+                  <span>2001</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3 class="card-title">Final Fantasy X</h3>
+                <span class="year">2001</span>
+              </div>
+              <span class="genre">RPG</span>
+              <p class="description">
+                Tidus dan Yuna menjalani perjalanan emosional melintasi Spira dengan sistem pertarungan turn-based yang ikonik.
+              </p>
+            </div>
+          </article>
+
+          <!-- 06 -->
+          <article class="game-card"
+            data-title="Devil May Cry 3"
+            data-genre="Action">
+            <div class="cover cover-purple">
+              <div class="cover-inner">
+                <span class="cover-label">PLAYSTATION 2</span>
+                <span class="cover-symbol">D</span>
+                <strong class="cover-title">DEVIL<br>MAY<br>CRY 3</strong>
+                <div class="cover-meta">
+                  <span>ACTION</span>
+                  <span>2005</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3 class="card-title">Devil May Cry 3</h3>
+                <span class="year">2005</span>
+              </div>
+              <span class="genre">Action</span>
+              <p class="description">
+                Dante beraksi dengan gaya bertarung cepat, combo kompleks, dan pilihan style yang membuat combat terasa ekspresif.
+              </p>
+            </div>
+          </article>
+
+          <!-- 07 -->
+          <article class="game-card"
+            data-title="Resident Evil 4"
+            data-genre="Horror">
+            <div class="cover cover-orange">
+              <div class="cover-inner">
+                <span class="cover-label">PLAYSTATION 2</span>
+                <span class="cover-symbol">R4</span>
+                <strong class="cover-title">RESIDENT<br>EVIL 4</strong>
+                <div class="cover-meta">
+                  <span>HORROR</span>
+                  <span>2005</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3 class="card-title">Resident Evil 4</h3>
+                <span class="year">2005</span>
+              </div>
+              <span class="genre">Horror</span>
+              <p class="description">
+                Leon Kennedy menjalankan misi penyelamatan dalam petualangan survival horror yang mengubah formula seri secara besar-besaran.
+              </p>
+            </div>
+          </article>
+
+          <!-- 08 -->
+          <article class="game-card"
+            data-title="Kingdom Hearts II"
+            data-genre="RPG">
+            <div class="cover cover-pink">
+              <div class="cover-inner">
+                <span class="cover-label">PLAYSTATION 2</span>
+                <span class="cover-symbol">★</span>
+                <strong class="cover-title">KINGDOM<br>HEARTS II</strong>
+                <div class="cover-meta">
+                  <span>RPG</span>
+                  <span>2005</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3 class="card-title">Kingdom Hearts II</h3>
+                <span class="year">2005</span>
+              </div>
+              <span class="genre">RPG</span>
+              <p class="description">
+                Sora kembali dalam perjalanan melintasi dunia penuh karakter Disney dan Final Fantasy dengan combat yang cepat dan stylish.
+              </p>
+            </div>
+          </article>
+
+          <!-- 09 -->
+          <article class="game-card"
+            data-title="Grand Theft Auto San Andreas"
+            data-genre="Action">
+            <div class="cover cover-green">
+              <div class="cover-inner">
+                <span class="cover-label">PLAYSTATION 2</span>
+                <span class="cover-symbol">SA</span>
+                <strong class="cover-title">SAN<br>ANDREAS</strong>
+                <div class="cover-meta">
+                  <span>ACTION</span>
+                  <span>2004</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3 class="card-title">GTA: San Andreas</h3>
+                <span class="year">2004</span>
+              </div>
+              <span class="genre">Action</span>
+              <p class="description">
+                CJ kembali ke Los Santos dan terlibat dalam kisah keluarga, geng, serta dunia open-world yang sangat luas.
+              </p>
+            </div>
+          </article>
+
+          <!-- 10 -->
+          <article class="game-card"
+            data-title="Kingdom Hearts"
+            data-genre="RPG">
+            <div class="cover cover-blue">
+              <div class="cover-inner">
+                <span class="cover-label">PLAYSTATION 2</span>
+                <span class="cover-symbol">KH</span>
+                <strong class="cover-title">KINGDOM<br>HEARTS</strong>
+                <div class="cover-meta">
+                  <span>RPG</span>
+                  <span>2002</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3 class="card-title">Kingdom Hearts</h3>
+                <span class="year">2002</span>
+              </div>
+              <span class="genre">RPG</span>
+              <p class="description">
+                Sora memulai petualangan lintas dunia bersama Donald dan Goofy untuk mencari teman-temannya.
+              </p>
+            </div>
+          </article>
+
+          <!-- 11 -->
+          <article class="game-card"
+            data-title="Tekken 5"
+            data-genre="Fighting">
+            <div class="cover cover-red">
+              <div class="cover-inner">
+                <span class="cover-label">PLAYSTATION 2</span>
+                <span class="cover-symbol">拳</span>
+                <strong class="cover-title">TEKKEN<br>5</strong>
+                <div class="cover-meta">
+                  <span>FIGHTING</span>
+                  <span>2004</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3 class="card-title">Tekken 5</h3>
+                <span class="year">2004</span>
+              </div>
+              <span class="genre">Fighting</span>
+              <p class="description">
+                Pertarungan klasik keluarga Mishima dan roster besar fighter menjadikan Tekken 5 salah satu fighting game PS2 terbaik.
+              </p>
+            </div>
+          </article>
+
+          <!-- 12 -->
+          <article class="game-card"
+            data-title="Jak II"
+            data-genre="Platformer">
+            <div class="cover cover-orange">
+              <div class="cover-inner">
+                <span class="cover-label">PLAYSTATION 2</span>
+                <span class="cover-symbol">J</span>
+                <strong class="cover-title">JAK<br>II</strong>
+                <div class="cover-meta">
+                  <span>PLATFORMER</span>
+                  <span>2003</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3 class="card-title">Jak II</h3>
+                <span class="year">2003</span>
+              </div>
+              <span class="genre">Platformer</span>
+              <p class="description">
+                Jak kembali dengan dunia yang lebih gelap, kota luas, kendaraan futuristik, dan kekuatan baru yang berbahaya.
+              </p>
+            </div>
+          </article>
+
+          <!-- 13 -->
+          <article class="game-card"
+            data-title="Ratchet & Clank 3"
+            data-genre="Platformer">
+            <div class="cover cover-purple">
+              <div class="cover-inner">
+                <span class="cover-label">PLAYSTATION 2</span>
+                <span class="cover-symbol">R&C</span>
+                <strong class="cover-title">RATCHET<br>& CLANK 3</strong>
+                <div class="cover-meta">
+                  <span>PLATFORMER</span>
+                  <span>2004</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3 class="card-title">Ratchet & Clank 3</h3>
+                <span class="year">2004</span>
+              </div>
+              <span class="genre">Platformer</span>
+              <p class="description">
+                Duo ikonik ini menghadapi ancaman galaksi dengan senjata absurd, humor, dan aksi platforming yang enerjik.
+              </p>
+            </div>
+          </article>
+
+          <!-- 14 -->
+          <article class="game-card"
+            data-title="Silent Hill 2"
+            data-genre="Horror">
+            <div class="cover cover-gray">
+              <div class="cover-inner">
+                <span class="cover-label">PLAYSTATION 2</span>
+                <span class="cover-symbol">∅</span>
+                <strong class="cover-title">SILENT<br>HILL 2</strong>
+                <div class="cover-meta">
+                  <span>HORROR</span>
+                  <span>2001</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3 class="card-title">Silent Hill 2</h3>
+                <span class="year">2001</span>
+              </div>
+              <span class="genre">Horror</span>
+              <p class="description">
+                James Sunderland tiba di kota berkabut Silent Hill setelah menerima surat misterius dari seseorang yang telah tiada.
+              </p>
+            </div>
+          </article>
+
+          <!-- 15 -->
+          <article class="game-card"
+            data-title="Need for Speed Most Wanted"
+            data-genre="Racing">
+            <div class="cover cover-gold">
+              <div class="cover-inner">
+                <span class="cover-label">PLAYSTATION 2</span>
+                <span class="cover-symbol">NFS</span>
+                <strong class="cover-title">MOST<br>WANTED</strong>
+                <div class="cover-meta">
+                  <span>RACING</span>
+                  <span>2005</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3 class="card-title">NFS: Most Wanted</h3>
+                <span class="year">2005</span>
+              </div>
+              <span class="genre">Racing</span>
+              <p class="description">
+                Balapan jalanan, mobil kencang, kejar-kejaran polisi, dan daftar Blacklist menjadikannya salah satu NFS paling dikenang.
+              </p>
+            </div>
+          </article>
+
+          <!-- 16 -->
+          <article class="game-card"
+            data-title="Bully"
+            data-genre="Action">
+            <div class="cover cover-blue">
+              <div class="cover-inner">
+                <span class="cover-label">PLAYSTATION 2</span>
+                <span class="cover-symbol">B</span>
+                <strong class="cover-title">BULLY</strong>
+                <div class="cover-meta">
+                  <span>ACTION</span>
+                  <span>2006</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3 class="card-title">Bully</h3>
+                <span class="year">2006</span>
+              </div>
+              <span class="genre">Action</span>
+              <p class="description">
+                Jimmy Hopkins menghadapi kehidupan sekolah yang penuh kelompok sosial, misi nakal, dan berbagai aktivitas.
+              </p>
+            </div>
+          </article>
+
+          <!-- 17 -->
+          <article class="game-card"
+            data-title="Okami"
+            data-genre="Adventure">
+            <div class="cover cover-red">
+              <div class="cover-inner">
+                <span class="cover-label">PLAYSTATION 2</span>
+                <span class="cover-symbol">☼</span>
+                <strong class="cover-title">OKAMI</strong>
+                <div class="cover-meta">
+                  <span>ADVENTURE</span>
+                  <span>2006</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3 class="card-title">Okami</h3>
+                <span class="year">2006</span>
+              </div>
+              <span class="genre">Adventure</span>
+              <p class="description">
+                Dewa matahari Amaterasu hadir dalam dunia bergaya lukisan Jepang untuk mengembalikan kehidupan dan keseimbangan alam.
+              </p>
+            </div>
+          </article>
+
+          <!-- 18 -->
+          <article class="game-card"
+            data-title="Dragon Ball Z Budokai 3"
+            data-genre="Fighting">
+            <div class="cover cover-orange">
+              <div class="cover-inner">
+                <span class="cover-label">PLAYSTATION 2</span>
+                <span class="cover-symbol">DB</span>
+                <strong class="cover-title">BUDOKAI<br>3</strong>
+                <div class="cover-meta">
+                  <span>FIGHTING</span>
+                  <span>2004</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3 class="card-title">Dragon Ball Z Budokai 3</h3>
+                <span class="year">2004</span>
+              </div>
+              <span class="genre">Fighting</span>
+              <p class="description">
+                Pertarungan Dragon Ball dengan roster besar, transformasi ikonik, dan gameplay cepat yang sangat cocok untuk multiplayer.
+              </p>
+            </div>
+          </article>
+
+          <!-- 19 -->
+          <article class="game-card"
+            data-title="Persona 4"
+            data-genre="RPG">
+            <div class="cover cover-gold">
+              <div class="cover-inner">
+                <span class="cover-label">PLAYSTATION 2</span>
+                <span class="cover-symbol">4</span>
+                <strong class="cover-title">PERSONA<br>4</strong>
+                <div class="cover-meta">
+                  <span>RPG</span>
+                  <span>2008</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3 class="card-title">Persona 4</h3>
+                <span class="year">2008</span>
+              </div>
+              <span class="genre">RPG</span>
+              <p class="description">
+                Misteri pembunuhan di kota kecil berpadu dengan kehidupan sekolah, hubungan sosial, dan dungeon supernatural.
+              </p>
+            </div>
+          </article>
+
+          <!-- 20 -->
+          <article class="game-card"
+            data-title="Prince of Persia The Sands of Time"
+            data-genre="Adventure">
+            <div class="cover cover-gold">
+              <div class="cover-inner">
+                <span class="cover-label">PLAYSTATION 2</span>
+                <span class="cover-symbol">⌛</span>
+                <strong class="cover-title">SANDS<br>OF TIME</strong>
+                <div class="cover-meta">
+                  <span>ADVENTURE</span>
+                  <span>2003</span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="card-top">
+                <h3 class="card-title">Prince of Persia</h3>
+                <span class="year">2003</span>
+              </div>
+              <span class="genre">Adventure</span>
+              <p class="description">
+                Sang Prince menggunakan kekuatan pasir waktu untuk menjelajahi istana, memecahkan puzzle, dan membalikkan kesalahan masa lalu.
+              </p>
+            </div>
+          </article>
+
+        </div>
+
+        <div class="empty" id="emptyState">
+          <strong>GAME TIDAK DITEMUKAN</strong>
+          Coba gunakan kata kunci atau genre lainnya.
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- =======================================================
+       FOOTER
+  ======================================================== -->
+  <footer id="about">
+    <div class="container footer-inner">
+      <span>PS2 VAULT — FAN-MADE SHOWCASE</span>
+      <span class="pixel">PRESS START TO REMEMBER.</span>
+    </div>
+  </footer>
+
+
+  <script>
+    /* =========================================================
+       PS2 VAULT — SEARCH + FILTER + RANDOM
+    ========================================================= */
+
+    const cards = [...document.querySelectorAll(".game-card")];
+    const filters = [...document.querySelectorAll(".filter")];
+    const searchInput = document.getElementById("searchInput");
+    const resultCount = document.getElementById("resultCount");
+    const emptyState = document.getElementById("emptyState");
+    const randomBtn = document.getElementById("randomBtn");
+
+    let activeGenre = "all";
+
+    function updateGames() {
+      const query = searchInput.value.trim().toLowerCase();
+
+      let visible = [];
+
+      cards.forEach(card => {
+        const title = card.dataset.title.toLowerCase();
+        const genre = card.dataset.genre.toLowerCase();
+
+        const matchesSearch =
+          !query || title.includes(query);
+
+        const matchesGenre =
+          activeGenre === "all" ||
+          genre === activeGenre.toLowerCase();
+
+        const show = matchesSearch && matchesGenre;
+
+        card.classList.toggle("hidden", !show);
+
+        if (show) {
+          visible.push(card);
+        }
+      });
+
+      resultCount.textContent =
+        `${visible.length} ${visible.length === 1 ? "game" : "games"}`;
+
+      emptyState.classList.toggle("show", visible.length === 0);
+    }
+
+    /* Search */
+    searchInput.addEventListener("input", updateGames);
+
+    /* Genre filters */
+    filters.forEach(filter => {
+      filter.addEventListener("click", () => {
+
+        filters.forEach(item =>
+          item.classList.remove("active")
+        );
+
+        filter.classList.add("active");
+
+        activeGenre = filter.dataset.filter;
+
+        updateGames();
+      });
+    });
+
+    /* Random game */
+    randomBtn.addEventListener("click", () => {
+
+      const available = cards.filter(card =>
+        !card.classList.contains("hidden")
+      );
+
+      if (!available.length) return;
+
+      const random =
+        available[Math.floor(Math.random() * available.length)];
+
+      random.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+
+      random.animate(
+        [
+          { transform: "translateY(-6px) scale(1)" },
+          { transform: "translateY(-6px) scale(1.025)" },
+          { transform: "translateY(-6px) scale(1)" }
+        ],
+        {
+          duration: 600,
+          easing: "cubic-bezier(.2,.8,.2,1)"
+        }
+      );
+    });
+
+    /* Keyboard shortcut: "/" focuses search */
+    document.addEventListener("keydown", event => {
+      if (
+        event.key === "/" &&
+        document.activeElement !== searchInput
+      ) {
+        event.preventDefault();
+        searchInput.focus();
+      }
+    });
+
+    /* Initial state */
+    updateGames();
+  </script>
+
+</body>
+</html>
