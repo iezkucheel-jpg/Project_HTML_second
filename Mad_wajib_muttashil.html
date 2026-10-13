@@ -707,7 +707,7 @@ function renderTheory(step) {
         <button class="btn-ignite" onclick="renderTheory(3)">Lanjut ➔</button>
       </div>
     `;
-    const td = { a: { r: 'Alif setelah huruf fathah.', w: K.jaa }, w: { r: 'Waw setelah huruf dhammah.', w: K.suu }, y: { r: 'Ya setelah huruf kasrah.', w: K.hani } };
+    const td = { a: { r: 'Alif setelah harakat fathah.', w: K.jaa }, w: { r: 'Waw setelah harakat dhammah.', w: K.suu }, y: { r: 'Ya setelah harakat kasrah.', w: K.hani } };
     const updateTab = (k) => {
       document.getElementById('tabPanel').innerHTML = ar(td[k].w) + `<p style="margin:10px 0 0; font-weight:900;">${td[k].r}</p>`;
       c.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.k === k));
