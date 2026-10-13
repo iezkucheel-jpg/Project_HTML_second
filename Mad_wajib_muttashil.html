@@ -6,13 +6,16 @@
 <title>Petualangan Tajwid: The Fire Streak (Optimized)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Scheherazade+New:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&family=Plus+Jakarta+Sans:wght@500;700&family=Scheherazade+New:wght@700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&family=Plus+Jakarta+Sans:wght@500;700&family=Scheherazade+New:wght@700&display=swap" rel="stylesheet"></noscript>
 <style>
 :root {
   /* Default Fire Theme (Level 1 - Ember/Orange) */
   --fire-core: #ff4e00; --fire-glow: #ec9f05; --fire-bg: rgba(255, 78, 0, 0.15);
   --dark-bg: #0a0503; --darker-bg: #030100;
   --text-main: #fdfdfd; --text-muted: #bdaea7;
+  --f-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', Roboto, Arial, sans-serif;
+  --f-display: 'Baloo 2', 'Plus Jakarta Sans', -apple-system, system-ui, Roboto, Arial, sans-serif;
 }
 
 /* Level 2 Fire (Blue) */
@@ -37,7 +40,7 @@
 html, body {
   margin: 0; padding: 0; width: 100%; height: 100%;
   background-color: var(--darker-bg); color: var(--text-main);
-  font-family: 'Outfit', sans-serif; overflow: hidden;
+  font-family: var(--f-body); overflow: hidden;
   transition: background-color 0.8s ease; user-select: none;
 }
 
@@ -46,15 +49,15 @@ html, body {
 .spark {
   position: absolute; bottom: -10px; width: 5px; height: 15px;
   background: var(--fire-glow); border-radius: 50%;
-  filter: blur(1px); animation: flyUp linear forwards; opacity: 0;
+  animation: flyUp linear forwards; opacity: 0; will-change: transform, opacity;
 }
 @keyframes flyUp {
   0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
   100% { transform: translateY(-100vh) scale(0.2) rotate(45deg); opacity: 0; }
 }
 .smoke {
-  position: absolute; width: 20px; height: 20px;
-  background: #333; border-radius: 50%; filter: blur(8px);
+  position: absolute; width: 36px; height: 36px;
+  background: radial-gradient(circle, rgba(51,51,51,0.9) 0%, rgba(51,51,51,0) 70%); border-radius: 50%; will-change: transform, opacity;
   animation: smokeRise 1.5s ease-out forwards; pointer-events: none;
 }
 @keyframes smokeRise {
@@ -90,9 +93,12 @@ html, body {
   display: flex; align-items: center; justify-content: center;
   padding: 85px 16px 20px;
   opacity: 0; pointer-events: none; transform: translateY(60px) scale(0.9);
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  visibility: hidden;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s linear 0.6s;
 }
-.stage.active { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
+.stage.active { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); visibility: visible; transition-delay: 0s; }
+/* stage yang tidak tampil: animasi dihentikan (hemat CPU/GPU) */
+.stage:not(.active) .flame-blob, .stage:not(.active) .content-core { animation-play-state: paused; }
 .shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
 @keyframes shake { 10%,90%{transform:translateX(-4px);} 20%,80%{transform:translateX(6px);} 30%,50%,70%{transform:translateX(-8px);} 40%,60%{transform:translateX(8px);} }
 
@@ -101,14 +107,14 @@ html, body {
   position: absolute; inset: -15px;
   background: linear-gradient(135deg, var(--fire-core), var(--fire-glow));
   border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-  animation: morphBlob 4s ease-in-out infinite alternate;
+  animation: morphBlob 4s ease-in-out infinite alternate; will-change: transform;
   box-shadow: 0 0 50px var(--fire-bg), inset 0 0 30px rgba(255,255,255,0.4);
   z-index: 0; transition: background 0.8s ease, box-shadow 0.8s ease;
 }
 @keyframes morphBlob {
-  0%   { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; transform: rotate(0deg) scale(1); }
+  0%   { transform: rotate(0deg) scale(1); }
   50%  { transform: rotate(2deg) scale(1.02); }
-  100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: rotate(-2deg) scale(1); }
+  100% { transform: rotate(-2deg) scale(1); }
 }
 
 .content-core {
@@ -116,7 +122,6 @@ html, body {
   width: 100%; max-height: 75vh; overflow-y: auto; overflow-x: hidden;
   border-radius: 45% 55% 65% 35% / 40% 45% 55% 50%;
   padding: 35px 25px; display: flex; flex-direction: column; align-items: center; text-align: center;
-  animation: morphInner 5s ease-in-out infinite alternate-reverse;
   border: 2px solid rgba(255,255,255,0.08);
 }
 .content-core::-webkit-scrollbar { width: 6px; }
@@ -148,7 +153,7 @@ p { font-size: 16px; color: var(--text-muted); line-height: 1.6; margin: 0 0 16p
 }
 .mad3d-stage:active { cursor: grabbing; }
 .mad3d-viewport { perspective: 900px; width: 100%; min-height: 110px; display: flex; align-items: center; justify-content: center; }
-.mad3d-word-wrapper { transform-style: preserve-3d; transition: transform 0.05s linear; }
+.mad3d-word-wrapper { transform-style: preserve-3d; transition: transform 0.05s linear; will-change: transform; }
 .mad3d-word { font-size: clamp(60px, 16vw, 85px); filter: drop-shadow(0 15px 15px rgba(0,0,0,0.8)); }
 .mad3d-word .a, .mad3d-word .w, .mad3d-word .y, .mad3d-word .h { text-shadow: 0 2px 0 #fff, 0 4px 0 #999, 0 6px 0 #555, 0 0 30px currentColor !important; }
 
@@ -167,7 +172,7 @@ p { font-size: 16px; color: var(--text-muted); line-height: 1.6; margin: 0 0 16p
 .tabs { display: flex; gap: 8px; margin: 10px 0; width: 100%; }
 .tab {
   flex: 1; min-height: 48px; border-radius: 14px; background: rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.1);
-  color: #888; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.2s ease;
+  color: #888; font-family: var(--f-body); font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.2s ease;
 }
 .tab[aria-selected=true] { background: var(--fire-bg); border-color: var(--fire-core); color: #fff; box-shadow: 0 0 15px var(--fire-bg); text-shadow: 0 0 8px var(--fire-core); }
 .panel { width: 100%; background: rgba(0,0,0,0.6); border-radius: 20px; padding: 15px; border: 1px dashed var(--fire-core); margin-bottom: 15px; }
@@ -192,14 +197,14 @@ p { font-size: 16px; color: var(--text-muted); line-height: 1.6; margin: 0 0 16p
 
 /* ===== INPUT & BUTTONS ===== */
 input[type=text] {
-  width: 100%; background: rgba(0,0,0,0.5); border: 2px solid var(--fire-core); border-radius: 16px; padding: 16px; color: #fff; font-family: 'Outfit', sans-serif;
+  width: 100%; background: rgba(0,0,0,0.5); border: 2px solid var(--fire-core); border-radius: 16px; padding: 16px; color: #fff; font-family: var(--f-body);
   font-size: 18px; font-weight: 700; text-align: center; outline: none; transition: box-shadow 0.3s; margin-bottom: 16px;
 }
 input[type=text]:focus { box-shadow: 0 0 25px var(--fire-bg); }
 
 .btn-ignite {
   background: linear-gradient(90deg, var(--fire-core), var(--fire-glow)); border: none; border-radius: 20px; padding: 16px 20px; width: 100%; margin-top: 10px;
-  color: #000; font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 900; text-transform: uppercase; cursor: pointer;
+  color: #000; font-family: var(--f-body); font-size: 18px; font-weight: 900; text-transform: uppercase; cursor: pointer;
   box-shadow: 0 8px 25px var(--fire-bg); transition: transform 0.1s, filter 0.2s;
 }
 .btn-ignite:active { transform: scale(0.95); filter: brightness(1.2); }
@@ -208,7 +213,7 @@ input[type=text]:focus { box-shadow: 0 0 25px var(--fire-bg); }
 /* ===== QUIZ OPTIONS ===== */
 .opt-grid { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-bottom: 15px; }
 .opt-spark {
-  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 15px; color: #fff; font-family: 'Outfit', sans-serif;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 15px; color: #fff; font-family: var(--f-body);
   font-size: 16px; font-weight: 700; text-align: left; cursor: pointer; transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden;
 }
 .opt-spark:active:not(:disabled) { transform: scale(0.96); }
@@ -226,10 +231,89 @@ input[type=text]:focus { box-shadow: 0 0 25px var(--fire-bg); }
   background: radial-gradient(circle, #444 0%, transparent 70%); border-radius: 50%; filter: blur(4px); opacity: 0.6;
 }
 
-#flash-overlay { position: fixed; inset: 0; background: var(--fire-core); z-index: 999; opacity: 0; pointer-events: none; mix-blend-mode: overlay; }
+#flash-overlay { display: none; position: fixed; inset: 0; background: var(--fire-core); z-index: 999; opacity: 0; pointer-events: none; mix-blend-mode: overlay; }
+
+/* ===== TEMA ES (awal: beku) ===== */
+[data-theme="ice"] {
+  --fire-core: #7dd3fc; --fire-glow: #bae6fd; --fire-bg: rgba(125, 211, 252, 0.18);
+  --dark-bg: #06121c; --darker-bg: #020a10;
+}
+[data-theme="ice"] .flame-blob { animation: none; }
+.hud-streak { transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.6s ease; }
+body.hud-off .hud-streak { opacity: 0; pointer-events: none; }
+.btn-ignite:disabled { opacity: 0.45; filter: grayscale(0.4); cursor: not-allowed; box-shadow: none; }
+
+.mad3d-stage.frozen { cursor: pointer; }
+.mad3d-stage.frozen .mad3d-viewport { opacity: 0.55; }
+.mad3d-stage.shattering { overflow: hidden; }
+.ice {
+  position: absolute; inset: 6px; border-radius: 18px; z-index: 5; cursor: pointer; touch-action: manipulation;
+  background: linear-gradient(135deg, rgba(210,240,255,0.62), rgba(120,190,235,0.45) 45%, rgba(220,245,255,0.6));
+  border: 2px solid rgba(255,255,255,0.7);
+  box-shadow: inset 0 0 25px rgba(255,255,255,0.6), 0 0 18px rgba(125,211,252,0.5);
+  display: flex; align-items: flex-end; justify-content: center; padding-bottom: 10px; overflow: hidden;
+}
+.ice::before { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.55) 38%, transparent 46%); pointer-events: none; }
+.ice svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.ice svg path { stroke: #fff; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; opacity: 0; transition: opacity 0.15s; }
+.ice svg path.on { opacity: 0.95; }
+.ice-hint { position: relative; font-size: 13px; font-weight: 900; color: #06374f; background: rgba(255,255,255,0.8); padding: 4px 12px; border-radius: 20px; direction: ltr; }
+.ice.hit { animation: iceHit 0.18s; }
+@keyframes iceHit { 0% { transform: scale(1); } 40% { transform: scale(0.97) rotate(-0.6deg); } 100% { transform: scale(1); } }
+.shard {
+  position: absolute; z-index: 6; pointer-events: none;
+  background: linear-gradient(135deg, rgba(235,250,255,0.9), rgba(120,190,235,0.7));
+  transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.3, 1), opacity 0.7s ease-in; will-change: transform, opacity;
+}
+html.lite .ice { box-shadow: inset 0 0 12px rgba(255,255,255,0.6); }
+
+h1, h2, .badge, .streak-text, .btn-ignite, .tab, .mad3d-beats span, .ice-hint { font-family: var(--f-display); }
+
+/* ===== OPENING: BOLA API TERPERANGKAP DI ES (statis, tanpa animasi) ===== */
+.iceball {
+  position: relative; flex-shrink: 0; width: min(36vw, 140px); aspect-ratio: 1; margin: 0 auto 14px; border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, rgba(150,215,250,0.35), rgba(70,140,200,0.55));
+  border: 2px solid rgba(255,255,255,0.75); overflow: hidden; cursor: pointer; touch-action: manipulation;
+  box-shadow: inset 0 0 26px rgba(255,255,255,0.55), 0 0 26px rgba(125,211,252,0.45);
+}
+.iceball .fireball {
+  position: absolute; inset: 22%; border-radius: 50%;
+  background: radial-gradient(circle at 50% 58%, #fff3b0 0 16%, #ffb300 40%, #ff4e00 72%, #b52a00 100%);
+  box-shadow: 0 0 22px 6px rgba(255,110,0,0.5);
+}
+.iceball::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+  background:
+    radial-gradient(circle at 30% 24%, rgba(255,255,255,0.85) 0 7%, transparent 8%),
+    linear-gradient(120deg, rgba(255,255,255,0.45) 0%, transparent 38%, transparent 62%, rgba(255,255,255,0.28) 100%),
+    rgba(190,230,255,0.28);
+}
+.iceball svg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
+.iceball svg path { stroke: rgba(255,255,255,0.8); stroke-width: 1.6; fill: none; stroke-linecap: round; }
+.iceball.hit { animation: iceHit 0.18s; }
+
+/* fase es: kartu persegi membulat (statis) supaya konten tidak terpotong */
+[data-theme="ice"] .content-core { border-radius: 32px; }
+[data-theme="ice"] .flame-blob { border-radius: 38px; }
+
+/* ===== RINGAN: fase es & saat mengetik nama ===== */
+[data-theme="ice"] .flame-blob { box-shadow: 0 0 22px var(--fire-bg); will-change: auto; }
+body.typing .flame-blob, body.typing .iceball { box-shadow: none; }
+input[type=text] { transition: none; -webkit-user-select: text; user-select: text; }
+input[type=text]:focus { box-shadow: 0 0 10px var(--fire-bg); }
+.iceball { contain: paint; }
+
+/* ===== MODE HEMAT (otomatis aktif hanya di HP/perangkat yang lambat) ===== */
+html.lite .flame-blob, html.lite .content-core { animation: none !important; }
+html.lite .flame-blob { box-shadow: 0 0 25px var(--fire-bg); }
+html.lite .ar { text-shadow: 0 2px 6px rgba(0,0,0,0.9); }
+html.lite .ar .a, html.lite .ar .w, html.lite .ar .y, html.lite .ar .h { text-shadow: 0 0 10px currentColor; }
+html.lite .mad3d-word .a, html.lite .mad3d-word .w, html.lite .mad3d-word .y, html.lite .mad3d-word .h { text-shadow: 0 3px 0 #777, 0 0 12px currentColor !important; }
+html.lite .mad3d-word { filter: none; }
+html.lite .opt-spark.menyala { box-shadow: 0 0 14px var(--fire-glow) !important; }
 </style>
 </head>
-<body>
+<body data-theme="ice" class="hud-off">
 
 <!-- STREAK HUD -->
 <div class="hud-streak" id="hudStreak">
@@ -246,11 +330,12 @@ input[type=text]:focus { box-shadow: 0 0 25px var(--fire-bg); }
   <div class="flame-wrapper">
     <div class="flame-blob"></div>
     <div class="content-core">
+      <div class="iceball" id="iceBall" onpointerdown="tapIceBall(this)"><div class="fireball"></div><svg viewBox="0 0 100 100"><path d="M50 4 L46 22 L56 34 M30 14 L38 30 L26 44 M82 30 L68 40 L72 56 M14 62 L28 58 M58 96 L60 80 L74 72"/></svg></div>
       <span class="badge">PETUALANGAN TAJWID</span>
-      <h1>Tungku Pengetahuan</h1>
-      <p>Pelajari materinya, lalu jaga api <i>streak</i>-mu tetap berkobar dengan melibas 10 pertanyaan!</p>
+      <h1>Tungku yang Membeku</h1>
+      <p>Cairkan esnya, pelajari materinya, lalu nyalakan api <i>streak</i>-mu lewat 10 pertanyaan!</p>
       <input type="text" id="inputNama" placeholder="Siapa namamu?">
-      <button class="btn-ignite" onclick="mulai()">🔥 Nyalakan Api!</button>
+      <button class="btn-ignite" onclick="mulai()">❄️ Mulai</button>
     </div>
   </div>
 </div>
@@ -305,7 +390,7 @@ const SOAL = [
   { t:'Bolehkah mad wajib muttashil dibaca pendek?', o:['Tidak boleh, wajib panjang','Boleh kalau terburu-buru','Boleh kapan saja'], b:0, p:'Namanya "wajib", harus dibaca panjang.' }
 ];
 
-const S = { nama: '', streak: 0, maxStreak: 0, qIndex: 0, correct: 0, order: [] };
+const S = { nama: '', streak: 0, maxStreak: 0, qIndex: 0, correct: 0, order: [], iceHits: 0, iceBroken: false };
 
 // ================= MEMORY-SAFE AUDIO SYNTHESIS =================
 let actx = null;
@@ -316,7 +401,7 @@ function initAudio(){
   if(actx.state==='suspended') actx.resume(); 
 }
 
-function playSwoosh() {
+function playSwoosh() { if(isIce()) return playFrost();
   initAudio(); if(!actx) return; const dur = 0.5; const now = actx.currentTime;
   if(!cachedNoiseBuffer) {
     cachedNoiseBuffer = actx.createBuffer(1, actx.sampleRate * dur, actx.sampleRate);
@@ -352,7 +437,7 @@ function playSizzle() {
   } catch(e) {}
 }
 
-function playBeatSound(pitch = 1.0) { 
+function playBeatSound(pitch = 1.0) { if(isIce()) return playIceBell(pitch); 
   initAudio(); if(!actx) return; const now = actx.currentTime;
   try {
     const osc = actx.createOscillator(); const g = actx.createGain();
@@ -363,8 +448,11 @@ function playBeatSound(pitch = 1.0) {
 }
 
 // ================= VISUAL EFFECTS =================
+const LITE = () => document.documentElement.classList.contains('lite');
 function spawnParticle(count = 1, fromElement = null) {
   const c = document.getElementById('sparks-container');
+  if(LITE()) count = Math.ceil(count / 2);
+  if(c.childElementCount > 40) return; // batas jumlah partikel
   for(let i=0; i<count; i++){
     const s = document.createElement('div'); s.className = 'spark';
     if(fromElement) {
@@ -377,12 +465,12 @@ function spawnParticle(count = 1, fromElement = null) {
   }
 }
 // Pencegah baterai bocor saat tab ditutup
-setInterval(() => { if(!document.hidden) spawnParticle(1); }, 400);
+setInterval(() => { if(!document.hidden && !LITE() && document.body.dataset.theme !== 'ice') spawnParticle(1); }, 400);
 
 function spawnSmoke(el) {
   const c = document.getElementById('sparks-container');
   const r = el.getBoundingClientRect();
-  for(let i=0; i<5; i++){
+  for(let i=0; i<(LITE() ? 2 : 5); i++){
     const sm = document.createElement('div'); sm.className = 'smoke';
     sm.style.left = (r.left + Math.random() * r.width) + 'px'; sm.style.top = (r.top + Math.random() * r.height) + 'px';
     c.appendChild(sm); setTimeout(()=>sm.remove(), 1500);
@@ -404,16 +492,132 @@ function updateStreakTheme() {
   hud.classList.add('bump'); setTimeout(()=>hud.classList.remove('bump'), 300);
 }
 
-function flashTransition() {
-  playSwoosh();
+function flashTransition(silent) {
+  if(!silent) playSwoosh();
   const f = document.getElementById('flash-overlay');
-  f.style.opacity = 1; setTimeout(() => f.style.opacity = 0, 150);
+  f.style.display = 'block'; f.style.opacity = 1; setTimeout(() => { f.style.opacity = 0; f.style.display = 'none'; }, 150);
 }
 
-function switchStage(id) {
-  flashTransition();
+function switchStage(id, silent) {
+  flashTransition(silent);
   document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
   setTimeout(() => { const el = document.getElementById(id); if(el) el.classList.add('active'); }, 200);
+}
+
+
+// ================= ES: SUARA, RETAKAN, PECAH =================
+const ICE_NEED = 5;
+function isIce() { return document.body.dataset.theme === 'ice'; }
+function getNoise() {
+  if(!cachedNoiseBuffer) {
+    cachedNoiseBuffer = actx.createBuffer(1, actx.sampleRate * 0.5, actx.sampleRate);
+    const d = cachedNoiseBuffer.getChannelData(0); for(let i=0; i<d.length; i++) d[i] = Math.random()*2 - 1;
+  }
+  return cachedNoiseBuffer;
+}
+function noiseBurst(now, dur, hp, vol) {
+  const n = actx.createBufferSource(); n.buffer = getNoise();
+  const f = actx.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = hp;
+  const g = actx.createGain(); g.gain.setValueAtTime(vol, now); g.gain.exponentialRampToValueAtTime(0.01, now + dur);
+  n.connect(f); f.connect(g); g.connect(actx.destination); n.start(now); n.stop(now + dur + 0.02);
+}
+function ping(now, freq, dur, vol, endFreq) {
+  const o = actx.createOscillator(), g = actx.createGain();
+  o.type = 'sine'; o.frequency.setValueAtTime(freq, now);
+  if(endFreq) o.frequency.exponentialRampToValueAtTime(endFreq, now + dur);
+  g.gain.setValueAtTime(vol, now); g.gain.exponentialRampToValueAtTime(0.01, now + dur);
+  o.connect(g); g.connect(actx.destination); o.start(now); o.stop(now + dur + 0.02);
+}
+// ketukan es: retak "tek" + denting kristal
+function playIceTap(n) {
+  initAudio(); if(!actx) return; const now = actx.currentTime;
+  try { noiseBurst(now, 0.05, 4500, 0.35); ping(now, 2600 + n*220, 0.14, 0.18, 1900 + n*120); ping(now + 0.01, 3900 + n*150, 0.09, 0.08); } catch(e) {}
+}
+// ketukan ringan di bola es opening
+function playIceTink() {
+  initAudio(); if(!actx) return; const now = actx.currentTime;
+  try { ping(now, 3200, 0.22, 0.14, 2800); ping(now + 0.02, 4800, 0.12, 0.06); } catch(e) {}
+}
+// pengganti swoosh saat masih fase es: desir dingin, bukan desis api
+function playFrost() {
+  initAudio(); if(!actx) return; const now = actx.currentTime;
+  try { noiseBurst(now, 0.25, 6000, 0.08); ping(now, 2200, 0.25, 0.05, 3000); } catch(e) {}
+}
+// pengganti bunyi ketukan beat saat fase es: lonceng kristal
+function playIceBell(pitch = 1.0) {
+  initAudio(); if(!actx) return; const now = actx.currentTime;
+  try { ping(now, 1100 * pitch, 0.35, 0.16); ping(now, 2200 * pitch, 0.25, 0.06); } catch(e) {}
+}
+// es pecah (murni es)
+function playIceShatter() {
+  initAudio(); if(!actx) return; const now = actx.currentTime;
+  try {
+    noiseBurst(now, 0.5, 3500, 0.45);
+    [2400, 3100, 3900].forEach((fr, i) => ping(now + i*0.03, fr, 0.3, 0.15, fr*0.5));
+  } catch(e) {}
+}
+// peralihan es -> api: pecahan es + api menyala (suara gabungan)
+function playThaw() {
+  playIceShatter();
+  setTimeout(() => { playIgnite(); playSizzle(); }, 160);
+}
+
+function iceHTML() {
+  return `<div class="ice" id="iceBlock">
+    <svg viewBox="0 0 100 60" preserveAspectRatio="none">
+      <path class="k1" d="M50 0 L46 14 L54 24 L48 36 L52 48"/>
+      <path class="k2" d="M46 14 L30 20 L18 34 L6 38 M30 20 L24 6"/>
+      <path class="k3" d="M54 24 L72 28 L86 44 L96 48 M72 28 L80 10 L92 4"/>
+      <path class="k4" d="M48 36 L36 46 L30 60 M52 48 L66 54 L74 60 M18 34 L12 50"/>
+    </svg>
+    <div class="ice-hint" id="iceHint">❄️ Ketuk es! ${ICE_NEED - S.iceHits}x lagi</div>
+  </div>`;
+}
+
+function tapIceBall(el) {
+  playIceTink();
+  el.classList.remove('hit'); void el.offsetWidth; el.classList.add('hit');
+}
+
+function hitIce(e) {
+  if(e && e.preventDefault) e.preventDefault();
+  const stage = document.getElementById('madStage'), ice = document.getElementById('iceBlock');
+  if(!ice || S.iceBroken) return;
+  S.iceHits++;
+  playIceTap(S.iceHits);
+  ice.querySelectorAll('path').forEach((p, i) => p.classList.toggle('on', i < S.iceHits));
+  ice.classList.remove('hit'); void ice.offsetWidth; ice.classList.add('hit');
+  if(S.iceHits >= ICE_NEED) {
+    S.iceBroken = true;
+    shatterIce(stage, ice);
+    const nb = document.getElementById('btnNext1');
+    if(nb) { nb.disabled = false; nb.textContent = 'Lanjut ➔'; }
+  } else {
+    const h = document.getElementById('iceHint'); if(h) h.textContent = `❄️ Ketuk es! ${ICE_NEED - S.iceHits}x lagi`;
+  }
+}
+
+function shatterIce(stage, ice) {
+  playIceShatter();
+  ice.remove();
+  stage.classList.remove('frozen');
+  stage.classList.add('shattering');
+  const r = stage.getBoundingClientRect();
+  const count = LITE() ? 8 : 14;
+  for(let i=0; i<count; i++) {
+    const d = document.createElement('div'); d.className = 'shard';
+    const w = 36 + Math.random()*44, h = 36 + Math.random()*44;
+    const pt = () => Math.round(Math.random()*100);
+    d.style.cssText = `left:${Math.random()*Math.max(r.width - w, 1)}px;top:${Math.random()*Math.max(r.height - h, 1)}px;width:${w}px;height:${h}px;` +
+      `clip-path:polygon(${pt()}% 0,100% ${pt()}%,${pt()}% 100%,0 ${pt()}%);`;
+    stage.appendChild(d);
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      d.style.transform = `translate(${(Math.random()-0.5)*160}px, ${100 + Math.random()*160}px) rotate(${(Math.random()-0.5)*360}deg)`;
+      d.style.opacity = 0;
+    }));
+    setTimeout(() => d.remove(), 800);
+  }
+  setTimeout(() => stage.classList.remove('shattering'), 850);
 }
 
 // ================= ANTI-CRASH 3D LOGIC (GLOBAL EVENT LISTENER) =================
@@ -445,6 +649,7 @@ function handleUp3D() {
 }
 
 function handleDown3D(e) {
+  if(!S.iceBroken) return;
   isDragging3D = true;
   startX3D = e.clientX || e.touches?.[0].clientX; startY3D = e.clientY || e.touches?.[0].clientY;
   if(squishyWrapper) squishyWrapper.style.transition = 'none';
@@ -455,6 +660,8 @@ function setup3DSquishy(){
   squishyStage = document.getElementById('madStage');
   squishyWrapper = document.getElementById('word3dWrapper');
   if(!squishyStage || !squishyWrapper) return;
+  const ice = document.getElementById('iceBlock');
+  if(ice) ice.addEventListener('pointerdown', hitIce);
   
   // Menggunakan inline handler agar tidak menumpuk meski dipanggil berkali-kali
   squishyStage.onmousedown = handleDown3D;
@@ -464,7 +671,9 @@ function setup3DSquishy(){
 // ================= MATERI LENGKAP =================
 function mulai() {
   const n = document.getElementById('inputNama').value.trim();
-  if(!n) return; S.nama = n; renderTheory(1); switchStage('stage-theory');
+  if(!n) return; S.nama = n;
+  if(document.activeElement) document.activeElement.blur();
+  setTimeout(() => { renderTheory(1); switchStage('stage-theory'); }, 250);
 }
 
 function renderTheory(step) {
@@ -473,13 +682,14 @@ function renderTheory(step) {
     c.innerHTML = `
       <span class="badge">MATERI 1/4</span><h2>Api Panjang (Mad)</h2>
       <p>Jika <b>Huruf Mad</b> bertemu <b>Hamzah</b> dalam satu kata, membacanya wajib panjang. Ini disebut <b>Mad Wajib Muttashil</b>.</p>
-      <div class="mad3d-stage" id="madStage">
+      <div class="mad3d-stage${S.iceBroken ? '' : ' frozen'}" id="madStage">
         <span class="badge" style="font-size:10px;">3D ELASTIS - BISA MOLOR!</span>
         <div class="mad3d-viewport"><div class="mad3d-word-wrapper" id="word3dWrapper"><div class="mad3d-word ar">${K.jaa}</div></div></div>
-        <div style="font-size:12px; color:#888; font-weight:700;">👆 Tarik tulisan Arabnya!</div>
+        <div style="font-size:12px; color:#888; font-weight:700;">${S.iceBroken ? '👆 Tarik tulisan Arabnya!' : '🧊 Arabnya terkunci di dalam es'}</div>
         <div class="mad3d-beats" id="beats3d"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+      ${S.iceBroken ? '' : iceHTML()}
       </div>
-      <button class="btn-ignite" onclick="renderTheory(2)">Lanjut Bakar ➔</button>
+      <button class="btn-ignite" id="btnNext1" onclick="renderTheory(2)" ${S.iceBroken ? '' : 'disabled'}>${S.iceBroken ? 'Lanjut ➔' : 'Pecahkan esnya dulu ❄️'}</button>
     `;
     setTimeout(setup3DSquishy, 100);
   } else if(step === 2) {
@@ -554,7 +764,8 @@ function playCardBeats(card){
 function startQuiz() {
   S.order = SOAL.map((_,i)=>i).sort(()=>Math.random()-0.5);
   S.qIndex = 0; S.correct = 0; S.streak = 0; S.maxStreak = 0;
-  renderQuiz(); switchStage('stage-quiz');
+  document.body.classList.remove('hud-off'); updateStreakTheme(); playThaw();
+  renderQuiz(); switchStage('stage-quiz', true);
 }
 
 function renderQuiz() {
@@ -568,9 +779,13 @@ function renderQuiz() {
   document.getElementById('btn-next-q').style.display = 'none';
   
   const container = document.getElementById('q-options');
-  container.innerHTML = opts.map(o => `
-    <button class="opt-spark" onclick="jawab(${o.origIdx}, ${qData.b}, this, '${qData.p}')">${o.txt}</button>
-  `).join('');
+  container.innerHTML = '';
+  opts.forEach(o => {
+    const b = document.createElement('button');
+    b.className = 'opt-spark'; b.dataset.orig = o.origIdx; b.innerHTML = o.txt;
+    b.addEventListener('click', () => jawab(o.origIdx, qData.b, b, qData.p));
+    container.appendChild(b);
+  });
 }
 
 function jawab(dipilih, benar, btn, pesan) {
@@ -586,7 +801,7 @@ function jawab(dipilih, benar, btn, pesan) {
     document.getElementById('stage-quiz').classList.add('shake');
     setTimeout(() => document.getElementById('stage-quiz').classList.remove('shake'), 400);
     document.getElementById('q-feedback').textContent = "☁️ PADAM HANGUS. " + pesan;
-    btns.forEach(b => { if(b.textContent === SOAL[S.order[S.qIndex]].o[benar]) { b.classList.add('menyala'); b.style.opacity = '0.7'; } });
+    btns.forEach(b => { if(+b.dataset.orig === benar) { b.classList.add('menyala'); b.style.opacity = '0.7'; } });
   }
   
   updateStreakTheme();
@@ -613,7 +828,28 @@ function renderResult() {
     .catch(() => document.getElementById('res-status').textContent = '⚠ Gagal menyimpan jejak (Cek internet)');
 }
 
+const inpNama = document.getElementById('inputNama');
+inpNama.addEventListener('focus', () => document.body.classList.add('typing'));
+inpNama.addEventListener('blur', () => document.body.classList.remove('typing'));
+inpNama.addEventListener('keydown', e => { if(e.key === 'Enter') mulai(); });
 updateStreakTheme();
+document.body.setAttribute('data-theme', 'ice');
+document.body.classList.add('hud-off');
+
+// ================= DETEKSI PERANGKAT LAMBAT =================
+(function perfWatch(){
+  let last = 0, frames = 0, total = 0;
+  function tick(t){
+    if(last){ const d = t - last; if(d < 500){ total += d; frames++; } }
+    last = t;
+    if(frames < 90 && !document.documentElement.classList.contains('lite')) return requestAnimationFrame(tick);
+    if(frames >= 90 && total / frames > 32) document.documentElement.classList.add('lite');
+  }
+  requestAnimationFrame(tick);
+  // cek ulang saat kuis dimulai (beban paling berat)
+  const _sq = startQuiz;
+  startQuiz = function(){ _sq(); last = 0; frames = 0; total = 0; setTimeout(()=>requestAnimationFrame(tick), 800); };
+})();
 </script>
 </body>
 </html>
