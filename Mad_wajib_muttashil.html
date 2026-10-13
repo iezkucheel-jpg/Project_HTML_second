@@ -349,7 +349,7 @@ html.lite .opt-spark.menyala { box-shadow: 0 0 14px var(--fire-glow) !important;
       <h2 id="q-title">Pertanyaan</h2>
       <div class="opt-grid" id="q-options"></div>
       <p id="q-feedback" style="margin: 5px 0 10px; font-weight: 900; color: var(--fire-glow); text-shadow: 0 0 10px rgba(0,0,0,0.8);"></p>
-      <button class="btn-ignite" id="btn-next-q" style="display: none;">Lanjut Membakar ➔</button>
+      <button class="btn-ignite" id="btn-next-q" style="display: none;">Lanjut Memasak ➔</button>
     </div>
   </div>
 </div>
@@ -736,7 +736,7 @@ function renderTheory(step) {
         <li>Apakah ada Hamzah di kata yang sama?</li>
         <li>Jika iya, wajib panjang 4–5 ketukan!</li>
       </ol>
-      <p style="margin-top:20px; font-weight:900; color:var(--fire-glow);">Bersiaplah masuk ke Crucible (Arena Kuis)!</p>
+      <p style="margin-top:20px; font-weight:900; color:var(--fire-glow);">Bersiaplah masuk dalam kobaran api (Arena Kuis)!</p>
       <button class="btn-ignite" onclick="startQuiz()">🔥 Masuk Arena Kuis!</button>
     `;
   }
@@ -795,7 +795,7 @@ function jawab(dipilih, benar, btn, pesan) {
   if(dipilih === benar) {
     S.correct++; S.streak++; if(S.streak > S.maxStreak) S.maxStreak = S.streak;
     playIgnite(); btn.classList.add('menyala'); spawnParticle(15, btn);
-    document.getElementById('q-feedback').textContent = "🔥 TERUSLAH MEMASAK! " + pesan;
+    document.getElementById('q-feedback').textContent = "🔥 MENYALAAA! " + pesan;
   } else {
     S.streak = 0; playSizzle(); btn.classList.add('hangus'); spawnSmoke(btn);
     document.getElementById('stage-quiz').classList.add('shake');
@@ -819,8 +819,8 @@ function renderResult() {
   else playSwoosh();
 
   document.getElementById('res-title').textContent = `${score}%`;
-  document.getElementById('res-name').textContent = `Mahkotamu Lagi Transit ${S.nama}!`;
-  document.getElementById('res-msg').textContent = `Berhasil menyelamatkan ${S.correct} bara kebenaran. Max Streak: ${S.maxStreak}🔥`;
+  document.getElementById('res-name').textContent = `Selamat ${S.nama}!`;
+  document.getElementById('res-msg').textContent = `Kamu berhasil menyelamatkan ${S.correct} bara kebenaran. Max Streak: ${S.maxStreak}🔥`;
   
   fetch(URL_SKOR, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
     body: JSON.stringify({ nama: S.nama, skor: score, total: SOAL.length, waktu: new Date().toLocaleString('id-ID') })
