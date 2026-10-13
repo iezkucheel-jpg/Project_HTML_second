@@ -680,10 +680,10 @@ function renderTheory(step) {
   const c = document.getElementById('theory-content');
   if(step === 1) {
     c.innerHTML = `
-      <span class="badge">MATERI 1/4</span><h2>Api Panjang (Mad)</h2>
+      <span class="badge">MATERI 1/4</span><h2>Bacaan Panjang (Mad)</h2>
       <p>Jika <b>Huruf Mad</b> bertemu <b>Hamzah</b> dalam satu kata, membacanya wajib panjang. Ini disebut <b>Mad Wajib Muttashil</b>.</p>
       <div class="mad3d-stage${S.iceBroken ? '' : ' frozen'}" id="madStage">
-        <span class="badge" style="font-size:10px;">3D ELASTIS - BISA MOLOR!</span>
+        <span class="badge" style="font-size:10px;">3D - ELASTIS!</span>
         <div class="mad3d-viewport"><div class="mad3d-word-wrapper" id="word3dWrapper"><div class="mad3d-word ar">${K.jaa}</div></div></div>
         <div style="font-size:12px; color:#888; font-weight:700;">${S.iceBroken ? '👆 Tarik tulisan Arabnya!' : '🧊 Arabnya terkunci di dalam es'}</div>
         <div class="mad3d-beats" id="beats3d"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
@@ -694,8 +694,8 @@ function renderTheory(step) {
     setTimeout(setup3DSquishy, 100);
   } else if(step === 2) {
     c.innerHTML = `
-      <span class="badge">MATERI 2/4</span><h2>Tiga Bara Huruf Mad</h2>
-      <p>Ketuk bara di bawah untuk melihat bentuk hurufnya menyala!</p>
+      <span class="badge">MATERI 2/4</span><h2>Tiga Es Huruf Mad</h2>
+      <p>Ketuk Es di bawah untuk melihat bentuk hurufnya menyala!</p>
       <div class="tabs">
         <button class="tab" aria-selected="true" data-k="a">Alif (ا)</button>
         <button class="tab" aria-selected="false" data-k="w">Waw (و)</button>
@@ -717,8 +717,8 @@ function renderTheory(step) {
     updateTab('a');
   } else if(step === 3) {
     c.innerHTML = `
-      <span class="badge">MATERI 3/4</span><h2>Latihan Ketukan Api</h2>
-      <p>Ketuk kartu di bawah, dengarkan desis 5 ketukan bara api!</p>
+      <span class="badge">MATERI 3/4</span><h2>Latihan Ketukan Es</h2>
+      <p>Ketuk kartu di bawah, dengarkan bunyi 5 ketukan es beku!</p>
       <div class="wordgrid">
         ${makeWordCard(K.yasya)} ${makeWordCard(K.maa)} ${makeWordCard(K.saa)}
       </div>
